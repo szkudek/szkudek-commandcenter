@@ -244,6 +244,23 @@ h1 {
     text-align: center;
 }
 
+.geo-games[open] {
+    grid-column: 1 / -1;
+}
+
+.geo-games summary {
+    cursor: pointer;
+    list-style: none;
+}
+
+.geo-games summary::-webkit-details-marker {
+    display: none;
+}
+
+.geo-options {
+    margin-top: 14px;
+}
+
 /* ADD BUTTON */
 
 .add-card {
@@ -439,12 +456,25 @@ footer span {
 
 <section class="category">
     <div class="category-header">
-        <span class="category-icon">🌍</span>
-        <h2>WORLD EXPLORER</h2>
-        <span class="category-count">03 / EXPLORE</span>
+        <span class="category-icon">🎮</span>
+        <h2>GAMING ARENA</h2>
+        <span class="category-count">03 / PLAY</span>
     </div>
 
     <div class="grid">
+        <a class="card" href="https://css-gather.kienek.pl/" target="_blank" rel="noopener">
+            <span class="card-icon">🎯</span>
+            <span class="card-name">CSS GATHER</span>
+            <span class="card-desc">Enter the arena</span>
+        </a>
+
+        <details class="geo-games" id="geo-games">
+            <summary class="card">
+                <span class="card-icon">🌍</span>
+                <span class="card-name">GeoGames</span>
+                <span class="card-desc">Rozwiń / zwiń gry ▾</span>
+            </summary>
+            <div class="grid geo-options">
         <a class="card" href="https://www.geoguessr.com/" target="_blank" rel="noopener">
             <span class="card-icon">🌎</span>
             <span class="card-name">GEOGUESSR</span>
@@ -462,22 +492,8 @@ footer span {
             <span class="card-name">WORLDLE</span>
             <span class="card-desc">Guess the country</span>
         </a>
-    </div>
-</section>
-
-<section class="category">
-    <div class="category-header">
-        <span class="category-icon">🎮</span>
-        <h2>GAMING ARENA</h2>
-        <span class="category-count">04 / PLAY</span>
-    </div>
-
-    <div class="grid">
-        <a class="card" href="https://css-gather.kienek.pl/" target="_blank" rel="noopener">
-            <span class="card-icon">🎯</span>
-            <span class="card-name">CSS GATHER</span>
-            <span class="card-desc">Enter the arena</span>
-        </a>
+            </div>
+        </details>
     </div>
 </section>
 
@@ -485,7 +501,7 @@ footer span {
     <div class="category-header">
         <span class="category-icon">⚔️</span>
         <h2>MY COLLECTION</h2>
-        <span class="category-count">05 / CUSTOM</span>
+        <span class="category-count">04 / CUSTOM</span>
     </div>
 
     <div class="grid" id="custom-grid">
@@ -662,12 +678,19 @@ loadGames();
 document.getElementById('search').addEventListener('input', function() {
     const query = this.value.toLowerCase().trim();
     let visibleCount = 0;
+    const geoGames = document.getElementById('geo-games');
+    const geoGroupMatch = !!query && 'geogames'.includes(query);
+    geoGames.open = !!query && (geoGroupMatch ||
+        Array.from(geoGames.querySelectorAll('a')).some(card =>
+            card.textContent.toLowerCase().includes(query)));
+
 
     document.querySelectorAll('.category').forEach(section => {
         let sectionVisible = 0;
 
         section.querySelectorAll('.card:not(.add-card)').forEach(card => {
-            const match = card.textContent.toLowerCase().includes(query);
+            const match = card.textContent.toLowerCase().includes(query) ||
+                (geoGroupMatch && geoGames.contains(card));
             card.style.display = match ? 'flex' : 'none';
 
             if (match) sectionVisible++;
