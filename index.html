@@ -434,9 +434,20 @@ h1 {
 .chesscom-card { --card-art: url('assets/chesscom.webp'); }
 .lichess-card { --card-art: url('assets/lichess.webp'); }
 .oldgames-card { --card-art: url('assets/oldgames-chess.webp'); }
+.chessbase-card { --card-art: url('assets/chessbase.webp'); }
+.chessable-card { --card-art: url('assets/chessable.webp'); }
+.css-gather-card { --card-art: url('assets/css-gather.webp'); }
+.geogames-card { --card-art: url('assets/geogames.webp'); }
+.geoguessr-card { --card-art: url('assets/geoguessr.webp'); }
+.seterra-card { --card-art: url('assets/seterra.webp'); }
+.worldle-card { --card-art: url('assets/worldle.webp'); }
 
 .geo-games[open] {
     grid-column: 1 / -1;
+}
+
+.geo-games[open] > summary {
+    width: calc((100% - 28px) / 3);
 }
 
 .geo-games summary {
@@ -481,6 +492,7 @@ footer span {
     .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .card { min-height: 125px; }
     .chess-grid { grid-template-columns: 1fr; }
+    .geo-games[open] > summary { width: 100%; }
     .chess-card { min-height: 115px; }
 }
 </style>
@@ -602,14 +614,14 @@ footer span {
         <span class="category-count">02 / LEARN</span>
     </div>
 
-    <div class="grid">
-        <a class="card" href="https://www.chessbase.com/" target="_blank" rel="noopener">
+    <div class="grid chess-grid">
+        <a class="card chess-card chessbase-card" href="https://www.chessbase.com/" target="_blank" rel="noopener">
             <span class="card-icon">♜</span>
             <span class="card-name">CHESSBASE</span>
             <span class="card-desc">Chess database & news</span>
         </a>
 
-        <a class="card" href="https://www.chessable.com/" target="_blank" rel="noopener">
+        <a class="card chess-card chessable-card" href="https://www.chessable.com/" target="_blank" rel="noopener">
             <span class="card-icon">♛</span>
             <span class="card-name">CHESSABLE</span>
             <span class="card-desc">Train your openings</span>
@@ -625,33 +637,33 @@ footer span {
         <span class="category-count">03 / PLAY</span>
     </div>
 
-    <div class="grid">
-        <a class="card" href="https://css-gather.kienek.pl/" target="_blank" rel="noopener">
+    <div class="grid chess-grid">
+        <a class="card chess-card css-gather-card" href="https://css-gather.kienek.pl/" target="_blank" rel="noopener">
             <span class="card-icon">🎯</span>
             <span class="card-name">CSS GATHER</span>
             <span class="card-desc">Enter the arena</span>
         </a>
 
         <details class="geo-games" id="geo-games">
-            <summary class="card">
+            <summary class="card chess-card geogames-card">
                 <span class="card-icon">🌍</span>
                 <span class="card-name">GeoGames</span>
                 <span class="card-desc">Rozwiń / zwiń gry ▾</span>
             </summary>
-            <div class="grid geo-options">
-        <a class="card" href="https://www.geoguessr.com/" target="_blank" rel="noopener">
+            <div class="grid chess-grid geo-options">
+        <a class="card chess-card geoguessr-card" href="https://www.geoguessr.com/" target="_blank" rel="noopener">
             <span class="card-icon">🌎</span>
             <span class="card-name">GEOGUESSR</span>
             <span class="card-desc">Explore the world</span>
         </a>
 
-        <a class="card" href="https://www.seterra.com/" target="_blank" rel="noopener">
+        <a class="card chess-card seterra-card" href="https://www.seterra.com/" target="_blank" rel="noopener">
             <span class="card-icon">🗺️</span>
             <span class="card-name">SETERRA</span>
             <span class="card-desc">Geography quizzes</span>
         </a>
 
-        <a class="card" href="https://worldle.teuteuf.fr/" target="_blank" rel="noopener">
+        <a class="card chess-card worldle-card" href="https://worldle.teuteuf.fr/" target="_blank" rel="noopener">
             <span class="card-icon">🌐</span>
             <span class="card-name">WORLDLE</span>
             <span class="card-desc">Guess the country</span>
