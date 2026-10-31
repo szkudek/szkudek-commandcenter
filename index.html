@@ -523,9 +523,28 @@ h1 {
     gap: 8px;
 }
 
-.shop-logo { width: 100px; height: 38px; object-fit: contain; }
+.shop-logo {
+    width: 112px;
+    max-width: 100%;
+    height: 38px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
+.shop-logo-badge {
+    width: 38px;
+    background: #fff;
+    border-radius: 4px;
+    padding: 2px;
+}
 
 .shop-mark {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 112px;
+    max-width: 100%;
+    height: 38px;
     color: var(--shop-color, var(--gold-light));
     font-size: 18px;
     font-weight: 800;
@@ -783,11 +802,11 @@ footer span {
             <span class="card-name">Allegro</span>
         </a>
         <a class="card shop-card" href="https://www.mediaexpert.pl/" target="_blank" rel="noopener" style="--shop-color: #ffe600">
-            <span class="shop-mark" aria-hidden="true">ME</span>
+            <img class="shop-logo" src="assets/shop-mediaexpert.webp" alt="" width="112" height="38">
             <span class="card-name">Media Expert</span>
         </a>
         <a class="card shop-card" href="https://www.euro.com.pl/" target="_blank" rel="noopener" style="--shop-color: #ffe500">
-            <span class="shop-mark" aria-hidden="true">EURO</span>
+            <img class="shop-logo" src="assets/shop-euro.webp" alt="" width="112" height="38">
             <span class="card-name">RTV EURO AGD</span>
         </a>
         <a class="card shop-card" href="https://www.empik.com/" target="_blank" rel="noopener" style="--shop-color: #ffffff">
@@ -811,7 +830,7 @@ footer span {
             <span class="card-name">Amazon</span>
         </a>
         <a class="card shop-card" id="bratko-shop" href="https://sklep.bratkobaits.com/" target="_blank" rel="noopener">
-            <span class="shop-mark" aria-hidden="true">🎣</span>
+            <img class="shop-logo shop-logo-badge" src="assets/shop-bratkobaits.webp" alt="" width="38" height="38">
             <span class="card-name">Bratko Baits</span>
         </a>
     </div>
