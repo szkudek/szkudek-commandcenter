@@ -168,6 +168,16 @@ h1 {
 .radio-status { font-size: 11px; color: var(--muted); line-height: 1.5; margin-top: 8px; }
 .radio-source { color: var(--gold); font-size: 10px; }
 
+.radio-form { border-top: 1px solid var(--border); margin-top: 12px; padding-top: 8px; }
+.radio-form label { display: block; font-size: 11px; color: var(--muted); margin: 6px 0 4px; }
+.radio-form input {
+    width: 100%; min-width: 0; padding: 8px; font: inherit; font-size: 12px;
+    color: var(--text); background: var(--bg); border: 1px solid var(--border); border-radius: 6px;
+}
+.radio-help { font-size: 10px; line-height: 1.6; color: var(--muted); margin-top: 10px; }
+.radio-actions { display: flex; flex-wrap: wrap; gap: 5px; }
+.radio-panel button:disabled { cursor: not-allowed; }
+
 .radio-info { margin-top: 5px; }
 .radio-info summary { font-size: 10px; color: var(--muted); cursor: pointer; }
 
@@ -504,24 +514,40 @@ footer span {
         <section class="radio-panel" aria-labelledby="radio-title">
             <h2 id="radio-title">♫ RADIO</h2>
             <div class="radio-pickers">
-            <label class="radio-label" for="radio-genre">Klimat</label>
-            <select id="radio-genre">
-                <option value="rap-pl">Polski rap</option>
-                <option value="rap-world">Zagraniczny rap</option>
-                <option value="reggae-pl">Polskie reggae</option>
-                <option value="reggae-world">Zagraniczne reggae</option>
-            </select>
-            <label class="radio-label" for="radio-station">Stacja</label>
-            <select id="radio-station" disabled>
-                <option value="">Wczytywanie stacji…</option>
-            </select>
+                <label class="radio-label" for="radio-genre">Kategoria</label>
+                <select id="radio-genre" disabled><option value="">Dodaj kategorię</option></select>
+                <label class="radio-label" for="radio-station">Stacja</label>
+                <select id="radio-station" disabled><option value="">Dodaj stację</option></select>
             </div>
             <audio id="radio-audio" controls preload="none" aria-label="Odtwarzacz radia internetowego"></audio>
             <details class="radio-info">
-            <summary>Informacje o stacji</summary>
-            <p class="radio-status" id="radio-status" role="status" aria-live="polite">Wczytywanie stacji…</p>
-            <button type="button" id="radio-reload">Odśwież stacje</button>
-            <a class="radio-source" href="https://www.radio-browser.info/" target="_blank" rel="noopener">Katalog Radio Browser</a>
+                <summary>Moje radio — zarządzaj</summary>
+                <p class="radio-status" id="radio-status" role="status" aria-live="polite">Zacznij od dodania swojej kategorii.</p>
+                <form id="radio-category-form" class="radio-form">
+                    <label for="radio-category-name">Nowa kategoria</label>
+                    <input id="radio-category-name" placeholder="Np. Mój polski rap" maxlength="60" required>
+                    <button type="submit">Dodaj kategorię</button>
+                </form>
+                <form id="radio-station-form" class="radio-form">
+                    <p class="radio-help">Stację dodasz do kategorii wybranej powyżej.</p>
+                    <label for="radio-name">Nazwa stacji</label>
+                    <input id="radio-name" placeholder="Nazwa stacji" maxlength="100" required>
+                    <label for="radio-url">Bezpośredni link do streamu HTTPS</label>
+                    <input id="radio-url" type="url" placeholder="https://…/stream" required>
+                    <button type="submit" id="radio-add-station" disabled>Dodaj stację</button>
+                </form>
+                <div class="radio-actions">
+                    <button type="button" id="radio-delete-station" disabled>Usuń stację</button>
+                    <button type="button" id="radio-delete-category" disabled>Usuń kategorię</button>
+                </div>
+                <p class="radio-status" id="radio-feedback" role="status" aria-live="polite"></p>
+                <div class="radio-actions">
+                    <button type="button" id="radio-export">Eksportuj kopię</button>
+                    <button type="button" id="radio-import">Importuj kopię</button>
+                    <input type="file" id="radio-import-file" accept="application/json,.json" hidden>
+                </div>
+                <p class="radio-help">Ustawienia są zapisane tylko w tej przeglądarce. Eksportuj kopię, aby przenieść je na inny komputer.</p>
+                <p class="radio-help">Streamów szukaj na stronach stacji lub w <a class="radio-source" href="https://www.radio-browser.info/" target="_blank" rel="noopener">Radio Browser</a> i <a class="radio-source" href="https://fmstream.org/" target="_blank" rel="noopener">FMSTREAM</a>. Wklej adres audio (np. MP3 lub AAC), a nie adres strony lub playlisty M3U/PLS.</p>
             </details>
         </section>
     </div>
