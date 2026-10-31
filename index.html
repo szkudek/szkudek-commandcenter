@@ -117,6 +117,32 @@ h1 {
     text-transform: capitalize;
 }
 
+.header-shortcuts {
+    display: flex;
+    justify-content: flex-start;
+    margin-top: 20px;
+}
+
+.discord-shortcut {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--panel);
+    transition: .2s ease;
+}
+
+.discord-shortcut:hover,
+.discord-shortcut:focus-visible {
+    border-color: #5865f2;
+    background: var(--panel-hover);
+    outline: 2px solid #5865f2;
+    outline-offset: 3px;
+}
+
 /* SEARCH */
 
 .search-box {
@@ -291,6 +317,23 @@ h1 {
     text-align: left;
 }
 
+.service-logo {
+    display: block;
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+}
+
+.lichess-logo {
+    filter: invert(1);
+}
+
+.oldgames-logo {
+    width: 210px;
+    max-width: 100%;
+    height: auto;
+}
+
 .chesscom-card { --card-art: url('assets/chesscom.webp'); }
 .lichess-card { --card-art: url('assets/lichess.webp'); }
 .oldgames-card { --card-art: url('assets/oldgames-chess.webp'); }
@@ -312,22 +355,6 @@ h1 {
     margin-top: 14px;
 }
 
-/* ADD BUTTON */
-
-.add-card {
-    border: 1px dashed rgba(197,165,104,.35);
-    background: rgba(32,35,28,.4);
-    cursor: pointer;
-}
-
-.add-card:hover {
-    border-style: solid;
-}
-
-.add-card .card-icon {
-    color: var(--gold);
-}
-
 /* FOOTER */
 
 footer {
@@ -342,76 +369,6 @@ footer {
 
 footer span {
     color: var(--gold);
-}
-
-/* MODAL */
-
-.modal {
-    display: none;
-    position: fixed;
-    inset: 0;
-    z-index: 10;
-    background: rgba(0,0,0,.8);
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-}
-
-.modal.active {
-    display: flex;
-}
-
-.modal-content {
-    background: #20231c;
-    border: 1px solid var(--gold);
-    border-radius: 12px;
-    padding: 30px;
-    width: 100%;
-    max-width: 390px;
-    box-shadow: 0 20px 80px #000;
-}
-
-.modal h3 {
-    font-family: 'Cinzel', serif;
-    color: var(--gold);
-    margin-bottom: 22px;
-}
-
-.modal input, .modal select {
-    width: 100%;
-    padding: 13px;
-    margin-bottom: 12px;
-    background: #141611;
-    border: 1px solid var(--border);
-    border-radius: 7px;
-    color: var(--text);
-    outline: none;
-}
-
-.modal-buttons {
-    display: flex;
-    gap: 10px;
-    margin-top: 8px;
-}
-
-.modal button {
-    flex: 1;
-    padding: 12px;
-    border-radius: 7px;
-    border: 1px solid var(--border);
-    background: #303729;
-    color: var(--text);
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.modal button.save {
-    background: var(--gold);
-    color: #171810;
-}
-
-.modal button:hover {
-    filter: brightness(1.15);
 }
 
 .no-results {
@@ -446,6 +403,12 @@ footer span {
         <div id="clock">00:00:00</div>
         <div id="date"></div>
     </div>
+
+    <div class="header-shortcuts">
+        <a class="discord-shortcut" href="discord://-/channels/@me" aria-label="Otwórz aplikację Discord" title="Otwórz aplikację Discord">
+            <img src="assets/discord-logo.svg" alt="" width="26" height="26">
+        </a>
+    </div>
 </header>
 
 <div class="search-box">
@@ -466,19 +429,19 @@ footer span {
 
     <div class="grid chess-grid">
         <a class="card chess-card chesscom-card" href="https://www.chess.com/" target="_blank" rel="noopener">
-            <span class="card-icon">♟️</span>
+            <span class="card-icon"><img class="service-logo" src="assets/chesscom-logo.svg" alt="" width="38" height="38"></span>
             <span class="card-name">CHESS.COM</span>
             <span class="card-desc">Play • Learn • Compete</span>
         </a>
 
         <a class="card chess-card lichess-card" href="https://lichess.org/" target="_blank" rel="noopener">
-            <span class="card-icon">♞</span>
+            <span class="card-icon"><img class="service-logo lichess-logo" src="assets/lichess-logo.svg" alt="" width="38" height="38"></span>
             <span class="card-name">LICHESS</span>
             <span class="card-desc">Free online chess</span>
         </a>
 
         <a class="card chess-card oldgames-card" href="https://css-gather.kienek.pl/#/chess" target="_blank" rel="noopener">
-            <span class="card-icon">♞</span>
+            <img class="service-logo oldgames-logo" src="assets/oldgames-logo.webp" alt="OldGamesArena" width="210" height="70">
             <span class="card-name">OldGamesArena CHESS</span>
             <span class="card-desc">Zagraj w szachy</span>
         </a>
@@ -551,19 +514,26 @@ footer span {
     </div>
 </section>
 
-<section class="category" id="custom-section">
+<section class="category" id="socials-section">
     <div class="category-header">
-        <span class="category-icon">⚔️</span>
-        <h2>MY COLLECTION</h2>
-        <span class="category-count">04 / CUSTOM</span>
+        <span class="category-icon">💬</span>
+        <h2>Socials</h2>
+        <span class="category-count">04 / SOCIALS</span>
     </div>
 
-    <div class="grid" id="custom-grid">
-        <button class="card add-card" id="add-button">
-            <span class="card-icon">＋</span>
-            <span class="card-name">ADD NEW GAME</span>
-            <span class="card-desc">Expand your arena</span>
-        </button>
+    <div class="grid">
+        <a class="card" href="https://www.youtube.com/" target="_blank" rel="noopener">
+            <span class="card-icon"><img class="service-logo" src="assets/youtube-logo.svg" alt="" width="38" height="38"></span>
+            <span class="card-name">YouTube</span>
+        </a>
+        <a class="card" href="https://www.twitch.tv/" target="_blank" rel="noopener">
+            <span class="card-icon"><img class="service-logo" src="assets/twitch-logo.svg" alt="" width="38" height="38"></span>
+            <span class="card-name">Twitch</span>
+        </a>
+        <a class="card" href="https://www.facebook.com/" target="_blank" rel="noopener">
+            <span class="card-icon"><img class="service-logo" src="assets/facebook-logo.svg" alt="" width="38" height="38"></span>
+            <span class="card-name">Facebook</span>
+        </a>
     </div>
 </section>
 
@@ -579,31 +549,6 @@ footer span {
     YOUR GAME. YOUR RULES.
 </footer>
 
-</div>
-
-<!-- ADD GAME MODAL -->
-
-<div class="modal" id="modal">
-    <div class="modal-content">
-        <h3>ADD TO YOUR ARENA</h3>
-
-        <input id="game-name" type="text" placeholder="Game name">
-        <input id="game-url" type="text" placeholder="Website address">
-        <input id="game-icon" type="text" placeholder="Icon (e.g. 🎮)" maxlength="8">
-        <input id="game-desc" type="text" placeholder="Short description">
-
-        <select id="game-category">
-            <option value="CHESS ARENA">Chess Arena</option>
-            <option value="WORLD EXPLORER">World Explorer</option>
-            <option value="GAMING ARENA">Gaming Arena</option>
-            <option value="OTHER">Other</option>
-        </select>
-
-        <div class="modal-buttons">
-            <button id="cancel-button">CANCEL</button>
-            <button class="save" id="save-button">ADD GAME</button>
-        </div>
-    </div>
 </div>
 
 <script>
@@ -628,105 +573,6 @@ updateClock();
 setInterval(updateClock, 1000);
 
 
-// CUSTOM GAMES
-
-const modal = document.getElementById('modal');
-const customGrid = document.getElementById('custom-grid');
-const addButton = document.getElementById('add-button');
-
-function openModal() {
-    modal.classList.add('active');
-}
-
-function closeModal() {
-    modal.classList.remove('active');
-}
-
-addButton.addEventListener('click', openModal);
-document.getElementById('cancel-button').addEventListener('click', closeModal);
-
-function loadGames() {
-    const games = JSON.parse(localStorage.getItem('arenaGames') || '[]');
-
-    customGrid.innerHTML = '';
-
-    games.forEach((game, index) => {
-        const card = document.createElement('a');
-        card.className = 'card';
-        card.href = game.url;
-        card.target = '_blank';
-        card.rel = 'noopener';
-
-        const icon = document.createElement('span');
-        icon.className = 'card-icon';
-        icon.textContent = game.icon || '🎮';
-
-        const name = document.createElement('span');
-        name.className = 'card-name';
-        name.textContent = game.name;
-
-        const desc = document.createElement('span');
-        desc.className = 'card-desc';
-        desc.textContent = game.desc || 'Custom game';
-
-        card.append(icon, name, desc);
-
-        card.addEventListener('contextmenu', event => {
-            event.preventDefault();
-            if (confirm('Remove ' + game.name + ' from your arena?')) {
-                const updated = games.filter((_, i) => i !== index);
-                localStorage.setItem('arenaGames', JSON.stringify(updated));
-                loadGames();
-            }
-        });
-
-        customGrid.appendChild(card);
-    });
-
-    customGrid.appendChild(addButton);
-}
-
-document.getElementById('save-button').addEventListener('click', () => {
-    const name = document.getElementById('game-name').value.trim();
-    let url = document.getElementById('game-url').value.trim();
-    const icon = document.getElementById('game-icon').value.trim() || '🎮';
-    const desc = document.getElementById('game-desc').value.trim();
-
-    if (!name || !url) {
-        alert('Enter the game name and website address.');
-        return;
-    }
-
-    if (!/^https?:\/\//i.test(url)) {
-        url = 'https://' + url;
-    }
-
-    try {
-        const parsed = new URL(url);
-        if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error();
-        url = parsed.href;
-    } catch {
-        alert('Enter a valid website address.');
-        return;
-    }
-
-    const games = JSON.parse(localStorage.getItem('arenaGames') || '[]');
-
-    games.push({ name, url, icon, desc });
-
-    localStorage.setItem('arenaGames', JSON.stringify(games));
-
-    ['game-name', 'game-url', 'game-icon', 'game-desc'].forEach(id => {
-        document.getElementById(id).value = '';
-    });
-
-    closeModal();
-    loadGames();
-});
-
-loadGames();
-
-
 // SEARCH
 
 document.getElementById('search').addEventListener('input', function() {
@@ -742,7 +588,7 @@ document.getElementById('search').addEventListener('input', function() {
     document.querySelectorAll('.category').forEach(section => {
         let sectionVisible = 0;
 
-        section.querySelectorAll('.card:not(.add-card)').forEach(card => {
+        section.querySelectorAll('.card').forEach(card => {
             const match = card.textContent.toLowerCase().includes(query) ||
                 (geoGroupMatch && geoGames.contains(card));
             card.style.display = match ? 'flex' : 'none';
@@ -750,7 +596,7 @@ document.getElementById('search').addEventListener('input', function() {
             if (match) sectionVisible++;
         });
 
-        section.style.display = sectionVisible > 0 || section.id === 'custom-section' && !query
+        section.style.display = sectionVisible > 0
             ? 'block' : 'none';
 
         visibleCount += sectionVisible;
@@ -761,11 +607,6 @@ document.getElementById('search').addEventListener('input', function() {
 });
 
 
-// CLOSE MODAL WHEN CLICKING OUTSIDE
-
-modal.addEventListener('click', event => {
-    if (event.target === modal) closeModal();
-});
 </script>
 
 </body>
