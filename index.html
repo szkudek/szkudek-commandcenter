@@ -52,23 +52,28 @@ body {
 /* HEADER */
 
 header {
+    position: relative;
+    isolation: isolate;
     text-align: center;
-    padding: 0 15px 40px;
+    padding: clamp(80px, 9vw, 150px) 15px 40px;
     border-bottom: 1px solid var(--border);
     margin-bottom: 35px;
 }
 
 .logo-icon {
-    margin: 0 -15px 20px;
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
 }
 
 .header-art {
     display: block;
     width: 100%;
-    height: auto;
-    max-height: max(440px, 32vw);
+    height: 100%;
     object-fit: cover;
-    object-position: center;
+    object-position: center 35%;
+    opacity: .38;
     border-radius: 14px 14px 0 0;
     mask-image: linear-gradient(to bottom, #000 80%, transparent);
 }
