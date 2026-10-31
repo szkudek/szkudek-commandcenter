@@ -26,8 +26,7 @@
     const notify = text => { get('dashboard-status').textContent = text; };
     const defaults = () => ({
         version: 1, notes: '', favorites: [], customTiles: [],
-        layout: { order: {}, collapsed: [] },
-        timer: { phase: 'focus', focusMinutes: 25, breakMinutes: 5, remainingMs: 1500000, deadline: null }
+        layout: { order: {}, collapsed: [] }
     });
 
     const favorites = node('section', 'category');
@@ -59,9 +58,6 @@
         if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) throw new Error('Podaj adres HTTP lub HTTPS bez danych logowania.');
         return url.href;
     }
-    function duration(timer, phase = timer.phase) {
-        return (phase === 'focus' ? timer.focusMinutes : timer.breakMinutes) * 60000;
-    }
     function validate(data) {
         if (!data || data.version !== 1 || !Array.isArray(data.customTiles) || data.customTiles.length > 500) throw new Error('Nieprawidłowa kopia ustawień strony.');
         const ids = new Set(builtinIds);
@@ -83,9 +79,7 @@
             order[group] = idList(list, ids);
         });
         const collapsed = idList(data.layout.collapsed, new Set(allSectionIds), allSectionIds.length);
-        const timer = data.timer;
-        if (!timer || !['focus', 'break'].includes(timer.phase) || !Number.isInteger(timer.focusMinutes) || timer.focusMinutes < 1 || timer.focusMinutes > 180 || !Number.isInteger(timer.breakMinutes) || timer.breakMinutes < 1 || timer.breakMinutes > 60 || !Number.isFinite(timer.remainingMs) || timer.remainingMs < 0 || timer.remainingMs > duration(timer) || (timer.deadline !== null && (!Number.isFinite(timer.deadline) || timer.deadline < 0 || timer.deadline > Date.now() + duration(timer) + 60000))) throw new Error('Nieprawidłowe ustawienia timera.');
-        return { version: 1, notes: text(data.notes, 100000, true), favorites, customTiles, layout: { order, collapsed }, timer: { phase: timer.phase, focusMinutes: timer.focusMinutes, breakMinutes: timer.breakMinutes, remainingMs: timer.remainingMs, deadline: timer.deadline } };
+        return { version: 1, notes: text(data.notes, 100000, true), favorites, customTiles, layout: { order, collapsed } };
     }
     try {
         const saved = localStorage.getItem(storageKey);
@@ -361,6 +355,12 @@
     });
     function renderTiles() { renderCustom(); renderFavorites(); applyFilter(); }
 
+    get('notes-shortcut').addEventListener('click', () => get('notes-dialog').showModal());
+    get('notes-close').addEventListener('click', () => get('notes-dialog').close());
+    get('notes-dialog').addEventListener('close', () => {
+        clearTimeout(noteSaveTimer);
+        get('notes-status').textContent = persist('') ? 'Zapisano automatycznie w tej przeglądarce.' : 'Nie zapisano — wyeksportuj kopię.';
+    });
     get('personal-notes').value = state.notes;
     get('personal-notes').addEventListener('input', event => {
         state.notes = event.target.value;
@@ -371,60 +371,6 @@
         }, 300);
     });
     window.addEventListener('pagehide', () => { clearTimeout(noteSaveTimer); persist(''); });
-
-    function remaining() { return state.timer.deadline === null ? state.timer.remainingMs : Math.min(duration(state.timer), Math.max(0, state.timer.deadline - Date.now())); }
-    function renderTimer() {
-        const timer = state.timer;
-        if (timer.deadline !== null && timer.deadline <= Date.now()) {
-            const finishedFocus = timer.phase === 'focus';
-            timer.phase = finishedFocus ? 'break' : 'focus';
-            timer.deadline = null;
-            timer.remainingMs = duration(timer);
-            persist('');
-            get('focus-status').textContent = finishedFocus ? 'Sesja zakończona. Czas na przerwę — kliknij Start, gdy będziesz gotowy.' : 'Przerwa zakończona. Możesz rozpocząć kolejną sesję.';
-        }
-        const seconds = Math.ceil(remaining() / 1000);
-        get('focus-countdown').textContent = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
-        get('focus-phase').textContent = timer.phase === 'focus' ? 'Skupienie' : 'Przerwa';
-        get('focus-start').textContent = timer.deadline === null ? 'Start' : 'Pauza';
-        get('focus-skip').textContent = timer.phase === 'focus' ? 'Przejdź do przerwy' : 'Przejdź do skupienia';
-        get('focus-minutes').disabled = get('break-minutes').disabled = timer.deadline !== null;
-    }
-    function syncTimerInputs() { get('focus-minutes').value = state.timer.focusMinutes; get('break-minutes').value = state.timer.breakMinutes; }
-    get('focus-start').addEventListener('click', () => {
-        renderTimer();
-        if (state.timer.deadline === null) {
-            state.timer.deadline = Date.now() + (state.timer.remainingMs || duration(state.timer));
-            get('focus-status').textContent = 'Timer działa. Możesz zamknąć panel i wrócić później.';
-        } else {
-            state.timer.remainingMs = remaining(); state.timer.deadline = null;
-            get('focus-status').textContent = 'Timer wstrzymany.';
-        }
-        persist(''); renderTimer();
-    });
-    get('focus-reset').addEventListener('click', () => {
-        state.timer.deadline = null; state.timer.remainingMs = duration(state.timer);
-        get('focus-status').textContent = 'Timer ustawiony od nowa.';
-        persist(''); renderTimer();
-    });
-    get('focus-skip').addEventListener('click', () => {
-        state.timer.phase = state.timer.phase === 'focus' ? 'break' : 'focus';
-        state.timer.deadline = null; state.timer.remainingMs = duration(state.timer);
-        get('focus-status').textContent = 'Kliknij Start, aby rozpocząć.';
-        persist(''); renderTimer();
-    });
-    ['focus-minutes', 'break-minutes'].forEach(id => get(id).addEventListener('change', () => {
-        const input = get(id);
-        if (!input.checkValidity() || !Number.isInteger(Number(input.value))) { input.reportValidity(); syncTimerInputs(); return; }
-        state.timer[id === 'focus-minutes' ? 'focusMinutes' : 'breakMinutes'] = Number(input.value);
-        state.timer.remainingMs = duration(state.timer); state.timer.deadline = null;
-        persist(''); renderTimer();
-    }));
-    syncTimerInputs(); renderTimer();
-    if (state.timer.deadline !== null) get('focus-status').textContent = 'Przywrócono działający timer.';
-    else if (state.timer.remainingMs < duration(state.timer)) get('focus-status').textContent = 'Przywrócono wstrzymany timer. Kliknij Start, aby kontynuować.';
-    setInterval(renderTimer, 250);
-    document.addEventListener('visibilitychange', renderTimer);
 
     function download(data, filename) {
         const url = URL.createObjectURL(new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' }));
@@ -450,11 +396,7 @@
             const next = validate(data.dashboard);
             const radio = window.CommandCenterRadio;
             const nextRadio = radio.validateData(data.radio);
-            if (!confirm('Import zastąpi obecne notatki, radio, ulubione, własne kafelki, układ i timer. Kontynuować?')) return;
-            if (next.timer.deadline !== null) {
-                next.timer.remainingMs = Math.min(duration(next.timer), Math.max(0, next.timer.deadline - Date.now()));
-                next.timer.deadline = null;
-            }
+            if (!confirm('Import zastąpi obecne notatki, radio, ulubione, własne kafelki i układ. Kontynuować?')) return;
             const previous = [localStorage.getItem(storageKey), localStorage.getItem(radio.storageKey)];
             try {
                 localStorage.setItem(radio.storageKey, JSON.stringify(nextRadio));
@@ -471,8 +413,7 @@
             get('personal-notes').value = state.notes;
             get('notes-status').textContent = 'Przywrócono notatki z kopii.';
             search.value = ''; geoManuallyOpen = false;
-            renderTiles(); syncTimerInputs(); renderTimer();
-            get('focus-status').textContent = 'Przywrócono timer. Kliknij Start, aby go uruchomić.';
+            renderTiles();
             notify('Przywrócono radio i wszystkie ustawienia strony.');
         } catch (error) { notify(`Nie udało się zaimportować kopii: ${error.message}`); }
         finally { event.target.value = ''; }

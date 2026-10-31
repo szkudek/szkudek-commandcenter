@@ -210,7 +210,8 @@ h1 {
 
 .discord-shortcut,
 .chatgpt-shortcut,
-.codex-shortcut {
+.codex-shortcut,
+.notes-shortcut {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -233,7 +234,9 @@ h1 {
 .chatgpt-shortcut:hover,
 .chatgpt-shortcut:focus-visible,
 .codex-shortcut:hover,
-.codex-shortcut:focus-visible {
+.codex-shortcut:focus-visible,
+.notes-shortcut:hover,
+.notes-shortcut:focus-visible {
     border-color: var(--gold);
     background: var(--panel-hover);
     outline: 2px solid var(--gold);
@@ -617,6 +620,9 @@ footer span {
         <a class="codex-shortcut" href="https://chatgpt.com/codex" target="_blank" rel="noopener" aria-label="Otwórz Codex" title="Otwórz Codex">
             <img src="assets/codex-icon.svg" alt="" width="26" height="26">
         </a>
+        <button type="button" class="notes-shortcut" id="notes-shortcut" aria-label="Otwórz notatnik" aria-haspopup="dialog" aria-controls="notes-dialog" title="Otwórz notatnik">
+            <img src="assets/notes-icon.svg" alt="" width="26" height="26">
+        </button>
     </div>
         <section class="radio-panel" aria-labelledby="radio-title">
             <h2 id="radio-title">♫ RADIO</h2>
@@ -676,36 +682,12 @@ footer span {
             <button type="button" id="dashboard-export">Eksportuj wszystko</button>
             <button type="button" id="dashboard-import">Importuj kopię</button>
             <input type="file" id="dashboard-import-file" accept="application/json,.json" hidden>
-            <p>Radio, notatki, ulubione, własne kafelki, układ i timer w jednym pliku.</p>
+            <p>Radio, notatki, ulubione, własne kafelki i układ w jednym pliku.</p>
         </div>
     </details>
 </div>
 <p class="dashboard-status" id="dashboard-status" role="status" aria-live="polite"></p>
 <p class="layout-help" id="layout-help" hidden>Przeciągnij kafelek za uchwyt ⠿ w obrębie sekcji lub użyj przycisków ← i →. Własne kafelki możesz edytować i usuwać. Zmiany zapisują się automatycznie.</p>
-<div class="workspace-tools">
-    <details class="utility-panel" id="notes-panel">
-        <summary>✎ Notatnik</summary>
-        <label for="personal-notes">Twoje notatki</label>
-        <textarea id="personal-notes" rows="6" maxlength="100000" placeholder="Pomysły, zadania, plan treningu…"></textarea>
-        <p id="notes-status" class="utility-help">Zapis automatyczny w tej przeglądarce.</p>
-    </details>
-    <details class="utility-panel" id="focus-panel">
-        <summary>◷ Timer skupienia</summary>
-        <div class="focus-settings">
-            <label for="focus-minutes">Skupienie (min)<input id="focus-minutes" type="number" min="1" max="180" value="25" required></label>
-            <label for="break-minutes">Przerwa (min)<input id="break-minutes" type="number" min="1" max="60" value="5" required></label>
-        </div>
-        <p id="focus-phase">Skupienie</p>
-        <output id="focus-countdown" aria-label="Pozostały czas">25:00</output>
-        <div class="focus-actions">
-            <button type="button" id="focus-start">Start</button>
-            <button type="button" id="focus-reset">Od nowa</button>
-            <button type="button" id="focus-skip">Przejdź do przerwy</button>
-        </div>
-        <p id="focus-status" class="utility-help" role="status" aria-live="polite">Rozpocznij swoją sesję skupienia.</p>
-    </details>
-</div>
-
 <main id="sections">
 
 <section class="category chess-center" id="chess-section">
@@ -889,6 +871,16 @@ footer span {
 </footer>
 
 </div>
+
+<dialog id="notes-dialog" class="tile-dialog notes-dialog" aria-labelledby="notes-dialog-title">
+    <div class="notes-dialog-header">
+        <h2 id="notes-dialog-title">Notatnik</h2>
+        <button type="button" id="notes-close" aria-label="Zamknij notatnik">Zamknij ×</button>
+    </div>
+    <label for="personal-notes">Twoje notatki</label>
+    <textarea id="personal-notes" rows="10" maxlength="100000" placeholder="Pomysły, zadania, plan treningu…" autofocus></textarea>
+    <p id="notes-status" class="utility-help" role="status">Zapis automatyczny w tej przeglądarce.</p>
+</dialog>
 
 <dialog id="tile-dialog" class="tile-dialog" aria-labelledby="tile-dialog-title">
     <form id="tile-form">

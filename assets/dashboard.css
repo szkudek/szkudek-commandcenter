@@ -1,10 +1,10 @@
-.dashboard-toolbar, .focus-actions, .dialog-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.dashboard-toolbar, .dialog-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 .dashboard-toolbar { justify-content: center; margin: -20px 0 12px; }
-.dashboard-toolbar button, .dashboard-toolbar summary, .utility-panel button, .tile-dialog button {
+.dashboard-toolbar button, .dashboard-toolbar summary, .tile-dialog button {
     background: var(--panel); color: var(--text); border: 1px solid var(--border);
     border-radius: 8px; padding: 10px 14px; font: inherit; font-size: 12px; cursor: pointer;
 }
-.dashboard-toolbar button:hover, .utility-panel button:hover, .tile-dialog button:hover { border-color: var(--gold); }
+.dashboard-toolbar button:hover, .tile-dialog button:hover { border-color: var(--gold); }
 .dashboard-toolbar button[aria-pressed="true"] { border-color: var(--gold); color: var(--gold-light); }
 .dashboard-status { min-height: 18px; text-align: center; font-size: 11px; color: var(--muted); margin-bottom: 12px; overflow-wrap: anywhere; }
 .layout-help { color: var(--gold-light); font-size: 12px; line-height: 1.6; margin-bottom: 18px; }
@@ -13,18 +13,14 @@
 .backup-menu summary::-webkit-details-marker { display: none; }
 .backup-actions { position: absolute; z-index: 5; top: calc(100% + 8px); right: 0; width: min(280px, 80vw); display: grid; gap: 8px; padding: 14px; border: 1px solid var(--gold); border-radius: 10px; background: var(--bg); box-shadow: 0 12px 30px #0008; }
 .backup-actions p, .utility-help { color: var(--muted); font-size: 11px; line-height: 1.6; }
-.workspace-tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-bottom: 30px; align-items: start; }
-.utility-panel { padding: 16px; border: 1px solid var(--border); border-radius: 12px; background: #20231cbd; min-width: 0; }
-.utility-panel > summary { color: var(--gold-light); cursor: pointer; font-size: 14px; }
-.utility-panel label, .tile-dialog label { display: block; color: var(--muted); font-size: 12px; margin: 14px 0 6px; }
-.utility-panel textarea, .utility-panel input, .tile-dialog input, .tile-dialog select {
+.tile-dialog label { display: block; color: var(--muted); font-size: 12px; margin: 14px 0 6px; }
+.notes-dialog textarea, .tile-dialog input, .tile-dialog select {
     background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 8px;
     padding: 10px; width: 100%; min-width: 0; font: inherit; font-size: 13px;
 }
-.utility-panel textarea { resize: vertical; min-height: 130px; max-height: 600px; line-height: 1.6; }
-.focus-settings { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-#focus-phase { color: var(--muted); font-size: 12px; margin-top: 16px; }
-#focus-countdown { display: block; color: var(--gold-light); font-size: 36px; font-variant-numeric: tabular-nums; letter-spacing: 2px; margin: 6px 0 14px; }
+.notes-dialog textarea { resize: vertical; min-height: 220px; max-height: 55dvh; line-height: 1.6; }
+.notes-dialog { width: min(620px, calc(100% - 28px)); }
+.notes-dialog-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .utility-help { margin-top: 10px; }
 .tile-wrap { position: relative; min-width: 0; height: 200px; }
 .tile-wrap > .card { width: 100%; height: 100%; }
@@ -51,9 +47,8 @@
 .tile-dialog h2 { font-size: 19px; color: var(--gold-light); }
 .dialog-actions { justify-content: flex-end; margin-top: 18px; }
 #tile-form-status { color: var(--gold-light); font-size: 12px; margin-top: 12px; }
-.dashboard-toolbar :focus-visible, .utility-panel :focus-visible, .tile-dialog :focus-visible, .tile-action:focus-visible, .section-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+.dashboard-toolbar :focus-visible, .tile-dialog :focus-visible, .tile-action:focus-visible, .section-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 @media(max-width: 700px) {
-    .workspace-tools { grid-template-columns: 1fr; }
     .category-header { flex-wrap: wrap; }
     .category h2 { font-size: 15px; }
     .category-count { font-size: 9px; }
