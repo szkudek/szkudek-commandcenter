@@ -474,26 +474,43 @@ h1 {
 .seterra-card { --card-art: url('assets/seterra.webp'); }
 .worldle-card { --card-art: url('assets/worldle.webp'); }
 
-.geo-games[open] {
-    grid-column: 1 / -1;
-}
-
-.geo-games[open] > summary {
-    width: calc((100% - 28px) / 3);
-}
-
-.geo-games summary {
+.geogames-card {
     cursor: pointer;
-    list-style: none;
+    font: inherit;
+    text-align: left;
 }
 
-.geo-games summary::-webkit-details-marker {
-    display: none;
+.geo-chevron {
+    position: absolute;
+    top: 20px;
+    right: 22px;
+    color: var(--gold-light);
+    transition: transform .2s ease;
 }
 
-.geo-options {
-    margin-top: 14px;
+.geogames-card[aria-expanded="true"] {
+    border-color: var(--gold-light);
+    box-shadow: inset 0 0 0 1px var(--gold);
 }
+
+.geogames-card[aria-expanded="true"] .geo-chevron { transform: rotate(180deg); }
+.geogames-card:focus-visible, .geo-close:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+.geo-panel {
+    grid-column: 1 / -1;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 16px 0;
+    animation: geo-reveal .2s ease-out;
+}
+
+.geo-panel[hidden] { display: none; }
+.geo-panel-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.geo-panel-header h3 { font-size: 13px; color: var(--gold-light); letter-spacing: 1px; }
+.geo-close { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; color: var(--text); padding: 8px 12px; cursor: pointer; }
+
+@keyframes geo-reveal { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
+@media(prefers-reduced-motion: reduce) { .geo-panel { animation: none; } .geo-chevron { transition: none; } }
 
 /* FOOTER */
 
@@ -523,7 +540,6 @@ footer span {
     .header-art { min-height: 210px; object-fit: cover; }
     .grid { grid-template-columns: 1fr; gap: 10px; }
     .chess-grid { grid-template-columns: 1fr; }
-    .geo-games[open] > summary { width: 100%; }
 }
 </style>
 </head>
@@ -674,12 +690,17 @@ footer span {
             <span class="card-desc">Enter the arena</span>
         </a>
 
-        <details class="geo-games" id="geo-games">
-            <summary class="card chess-card geogames-card">
+        <button type="button" class="card chess-card geogames-card" id="geo-toggle" aria-expanded="false" aria-controls="geo-games">
+                <span class="geo-chevron" aria-hidden="true">⌄</span>
                 <span class="card-icon">🌍</span>
                 <span class="card-name">GeoGames</span>
-                <span class="card-desc">Rozwiń / zwiń gry ▾</span>
-            </summary>
+                <span class="card-desc" id="geo-toggle-label">Wybierz grę · 3 gry</span>
+        </button>
+        <div class="geo-panel" id="geo-games" role="region" aria-labelledby="geo-panel-title" hidden>
+            <div class="geo-panel-header">
+                <h3 id="geo-panel-title">GeoGames — wybierz grę</h3>
+                <button type="button" class="geo-close" id="geo-close">Zwiń ×</button>
+            </div>
             <div class="grid chess-grid geo-options">
         <a class="card chess-card geoguessr-card" href="https://www.geoguessr.com/" target="_blank" rel="noopener">
             <img class="service-logo local-logo square-wordmark" src="assets/geoguessr-logo.webp" alt="" width="180" height="64">
@@ -699,7 +720,7 @@ footer span {
             <span class="card-desc">Guess the country</span>
         </a>
             </div>
-        </details>
+        </div>
     </div>
 </section>
 
@@ -763,39 +784,59 @@ updateClock();
 setInterval(updateClock, 1000);
 
 
-// SEARCH
+// GEOGAMES AND SEARCH
+
+const geoGames = document.getElementById('geo-games');
+const geoToggle = document.getElementById('geo-toggle');
+const geoLinks = Array.from(geoGames.querySelectorAll('a.card'));
+let geoManuallyOpen = false;
+
+function setGeoOpen(open) {
+    geoGames.hidden = !open;
+    geoToggle.setAttribute('aria-expanded', String(open));
+    document.getElementById('geo-toggle-label').textContent = open ? 'Gry rozwinięte · kliknij, aby zwinąć' : 'Wybierz grę · 3 gry';
+}
+
+geoToggle.addEventListener('click', () => {
+    geoManuallyOpen = geoGames.hidden;
+    setGeoOpen(geoManuallyOpen);
+});
+
+function closeGeoPanel() {
+    geoManuallyOpen = false;
+    setGeoOpen(false);
+    geoToggle.focus();
+}
+
+document.getElementById('geo-close').addEventListener('click', closeGeoPanel);
+geoGames.addEventListener('keydown', event => {
+    if (event.key === 'Escape') {
+        event.preventDefault();
+        closeGeoPanel();
+    }
+});
 
 document.getElementById('search').addEventListener('input', function() {
     const query = this.value.toLowerCase().trim();
-    let visibleCount = 0;
-    const geoGames = document.getElementById('geo-games');
     const geoGroupMatch = !!query && 'geogames'.includes(query);
-    geoGames.open = !!query && (geoGroupMatch ||
-        Array.from(geoGames.querySelectorAll('a')).some(card =>
-            card.textContent.toLowerCase().includes(query)));
-
+    const geoChildMatch = !!query && geoLinks.some(card => card.textContent.toLowerCase().includes(query));
+    setGeoOpen(query ? geoGroupMatch || geoChildMatch : geoManuallyOpen);
+    let visibleCount = 0;
 
     document.querySelectorAll('.category').forEach(section => {
         let sectionVisible = 0;
-
         section.querySelectorAll('.card').forEach(card => {
             const match = card.textContent.toLowerCase().includes(query) ||
-                (geoGroupMatch && geoGames.contains(card));
+                (geoGroupMatch && geoGames.contains(card)) ||
+                (card === geoToggle && geoChildMatch);
             card.style.display = match ? 'flex' : 'none';
-
             if (match) sectionVisible++;
         });
-
-        section.style.display = sectionVisible > 0
-            ? 'block' : 'none';
-
+        section.style.display = sectionVisible > 0 ? 'block' : 'none';
         visibleCount += sectionVisible;
     });
-
-    document.getElementById('no-results').style.display =
-        visibleCount === 0 ? 'block' : 'none';
+    document.getElementById('no-results').style.display = visibleCount === 0 ? 'block' : 'none';
 });
-
 
 </script>
 
