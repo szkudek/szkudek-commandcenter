@@ -2,7 +2,7 @@
     'use strict';
     const get = id => document.getElementById(id);
     const storageKey = 'szkudek-dashboard-v1';
-    const sectionIds = ['chess-section', 'learn-section', 'gaming-section', 'socials-section', 'shops-section'];
+    const sectionIds = ['socials-section', 'chess-section', 'learn-section', 'gaming-section', 'shops-section'];
     const favoriteId = 'favorites-section';
     const allSectionIds = [favoriteId, ...sectionIds];
     const grids = new Map();
