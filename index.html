@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#151713">
+<title>Arena Gaming</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --bg: #141611;
+    --panel: #20231c;
+    --panel-hover: #292e23;
+    --gold: #c5a568;
+    --gold-light: #e5c98e;
+    --text: #eee9dc;
+    --muted: #929587;
+    --green: #82966c;
+    --border: rgba(197,165,104,.19);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(130,150,108,.12), transparent 50%),
+        linear-gradient(rgba(20,22,17,.96), rgba(20,22,17,.98)),
+        repeating-conic-gradient(#292d24 0% 25%, #1b1e18 0% 50%) 50% / 70px 70px;
+    background-attachment: fixed;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    padding: 35px 20px 60px;
+}
+
+.container {
+    max-width: 1150px;
+    margin: auto;
+}
+
+/* HEADER */
+
+header {
+    text-align: center;
+    padding: 35px 15px 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 35px;
+}
+
+.logo-icon {
+    font-size: 43px;
+    color: var(--gold);
+    margin-bottom: 12px;
+    text-shadow: 0 0 25px rgba(197,165,104,.3);
+}
+
+h1 {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(34px, 6vw, 57px);
+    letter-spacing: 7px;
+    color: var(--gold-light);
+    font-weight: 700;
+    text-shadow: 0 3px 20px rgba(197,165,104,.12);
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 11px;
+    letter-spacing: 5px;
+    text-transform: uppercase;
+    margin-top: 12px;
+}
+
+.datetime {
+    margin-top: 28px;
+}
+
+#clock {
+    font-size: 29px;
+    font-weight: 600;
+    letter-spacing: 3px;
+    color: var(--text);
+}
+
+#date {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 6px;
+    text-transform: capitalize;
+}
+
+/* SEARCH */
+
+.search-box {
+    max-width: 520px;
+    margin: 0 auto 45px;
+    position: relative;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 17px 22px 17px 52px;
+    border: 1px solid var(--border);
+    background: rgba(32,35,28,.9);
+    border-radius: 10px;
+    color: var(--text);
+    outline: none;
+    font-size: 14px;
+    transition: .25s;
+}
+
+.search-box input:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 20px rgba(197,165,104,.08);
+}
+
+.search-box input::placeholder {
+    color: #777c6e;
+}
+
+.search-icon {
+    position: absolute;
+    left: 19px;
+    top: 15px;
+    font-size: 19px;
+    color: var(--gold);
+}
+
+/* SECTIONS */
+
+.category {
+    margin-bottom: 38px;
+}
+
+.category-header {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    margin-bottom: 17px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+}
+
+.category-icon {
+    font-size: 22px;
+}
+
+.category h2 {
+    font-family: 'Cinzel', serif;
+    color: var(--gold);
+    font-size: 17px;
+    letter-spacing: 2px;
+    font-weight: 600;
+}
+
+.category-count {
+    margin-left: auto;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+/* GAME CARDS */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+    gap: 14px;
+}
+
+.card {
+    position: relative;
+    min-height: 145px;
+    padding: 23px 15px;
+    border: 1px solid var(--border);
+    border-radius: 11px;
+    background: linear-gradient(145deg, #25291f, #1b1e18);
+    text-decoration: none;
+    color: var(--text);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    transition: .25s ease;
+    overflow: hidden;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent, rgba(197,165,104,.07));
+    opacity: 0;
+    transition: .25s;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    border-color: var(--gold);
+    background: var(--panel-hover);
+    box-shadow: 0 10px 30px rgba(0,0,0,.25),
+                0 0 20px rgba(197,165,104,.07);
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+.card-icon {
+    font-size: 36px;
+    transition: .25s;
+    position: relative;
+}
+
+.card:hover .card-icon {
+    transform: scale(1.12);
+}
+
+.card-name {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .7px;
+    position: relative;
+    text-align: center;
+}
+
+.card-desc {
+    color: var(--muted);
+    font-size: 10px;
+    position: relative;
+    text-align: center;
+}
+
+/* ADD BUTTON */
+
+.add-card {
+    border: 1px dashed rgba(197,165,104,.35);
+    background: rgba(32,35,28,.4);
+    cursor: pointer;
+}
+
+.add-card:hover {
+    border-style: solid;
+}
+
+.add-card .card-icon {
+    color: var(--gold);
+}
+
+/* FOOTER */
+
+footer {
+    text-align: center;
+    padding-top: 30px;
+    margin-top: 45px;
+    border-top: 1px solid var(--border);
+    color: #656b5d;
+    font-size: 10px;
+    letter-spacing: 3px;
+}
+
+footer span {
+    color: var(--gold);
+}
+
+/* MODAL */
+
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 10;
+    background: rgba(0,0,0,.8);
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: #20231c;
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    padding: 30px;
+    width: 100%;
+    max-width: 390px;
+    box-shadow: 0 20px 80px #000;
+}
+
+.modal h3 {
+    font-family: 'Cinzel', serif;
+    color: var(--gold);
+    margin-bottom: 22px;
+}
+
+.modal input, .modal select {
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 12px;
+    background: #141611;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    color: var(--text);
+    outline: none;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.modal button {
+    flex: 1;
+    padding: 12px;
+    border-radius: 7px;
+    border: 1px solid var(--border);
+    background: #303729;
+    color: var(--text);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.modal button.save {
+    background: var(--gold);
+    color: #171810;
+}
+
+.modal button:hover {
+    filter: brightness(1.15);
+}
+
+.no-results {
+    display: none;
+    text-align: center;
+    color: var(--muted);
+    padding: 35px;
+}
+
+@media(max-width: 550px) {
+    body { padding: 15px 13px 40px; }
+    header { padding-top: 30px; }
+    h1 { letter-spacing: 4px; }
+    .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .card { min-height: 125px; }
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+    <div class="logo-icon">♟</div>
+    <h1>ARENA GAMING</h1>
+    <div class="subtitle">Your personal gaming headquarters</div>
+
+    <div class="datetime">
+        <div id="clock">00:00:00</div>
+        <div id="date"></div>
+    </div>
+</header>
+
+<div class="search-box">
+    <span class="search-icon">⌕</span>
+    <input type="text" id="search"
+        placeholder="Search your arena..."
+        autocomplete="off">
+</div>
+
+<main id="sections">
+
+<section class="category">
+    <div class="category-header">
+        <span class="category-icon">♟</span>
+        <h2>CHESS ARENA</h2>
+        <span class="category-count">01 / CHESS</span>
+    </div>
+
+    <div class="grid">
+        <a class="card" href="https://www.chess.com/" target="_blank" rel="noopener">
+            <span class="card-icon">♟️</span>
+            <span class="card-name">CHESS.COM</span>
+            <span class="card-desc">Play • Learn • Compete</span>
+        </a>
+
+        <a class="card" href="https://lichess.org/" target="_blank" rel="noopener">
+            <span class="card-icon">♞</span>
+            <span class="card-name">LICHESS</span>
+            <span class="card-desc">Free online chess</span>
+        </a>
+
+        <a class="card" href="https://www.chessbase.com/" target="_blank" rel="noopener">
+            <span class="card-icon">♜</span>
+            <span class="card-name">CHESSBASE</span>
+            <span class="card-desc">Chess database & news</span>
+        </a>
+
+        <a class="card" href="https://www.chessable.com/" target="_blank" rel="noopener">
+            <span class="card-icon">♛</span>
+            <span class="card-name">CHESSABLE</span>
+            <span class="card-desc">Train your openings</span>
+        </a>
+    </div>
+</section>
+
+<section class="category">
+    <div class="category-header">
+        <span class="category-icon">🌍</span>
+        <h2>WORLD EXPLORER</h2>
+        <span class="category-count">02 / EXPLORE</span>
+    </div>
+
+    <div class="grid">
+        <a class="card" href="https://www.geoguessr.com/" target="_blank" rel="noopener">
+            <span class="card-icon">🌎</span>
+            <span class="card-name">GEOGUESSR</span>
+            <span class="card-desc">Explore the world</span>
+        </a>
+
+        <a class="card" href="https://www.seterra.com/" target="_blank" rel="noopener">
+            <span class="card-icon">🗺️</span>
+            <span class="card-name">SETERRA</span>
+            <span class="card-desc">Geography quizzes</span>
+        </a>
+
+        <a class="card" href="https://worldle.teuteuf.fr/" target="_blank" rel="noopener">
+            <span class="card-icon">🌐</span>
+            <span class="card-name">WORLDLE</span>
+            <span class="card-desc">Guess the country</span>
+        </a>
+    </div>
+</section>
+
+<section class="category">
+    <div class="category-header">
+        <span class="category-icon">🎮</span>
+        <h2>GAMING ARENA</h2>
+        <span class="category-count">03 / PLAY</span>
+    </div>
+
+    <div class="grid">
+        <a class="card" href="https://css-gather.kienek.pl/" target="_blank" rel="noopener">
+            <span class="card-icon">🎯</span>
+            <span class="card-name">CSS GATHER</span>
+            <span class="card-desc">Enter the arena</span>
+        </a>
+    </div>
+</section>
+
+<section class="category" id="custom-section">
+    <div class="category-header">
+        <span class="category-icon">⚔️</span>
+        <h2>MY COLLECTION</h2>
+        <span class="category-count">04 / CUSTOM</span>
+    </div>
+
+    <div class="grid" id="custom-grid">
+        <button class="card add-card" id="add-button">
+            <span class="card-icon">＋</span>
+            <span class="card-name">ADD NEW GAME</span>
+            <span class="card-desc">Expand your arena</span>
+        </button>
+    </div>
+</section>
+
+</main>
+
+<div class="no-results" id="no-results">
+    No games found in your arena.
+</div>
+
+<footer>
+    <span>♟</span> ARENA GAMING <span>♟</span>
+    <br><br>
+    YOUR GAME. YOUR RULES.
+</footer>
+
+</div>
+
+<!-- ADD GAME MODAL -->
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <h3>ADD TO YOUR ARENA</h3>
+
+        <input id="game-name" type="text" placeholder="Game name">
+        <input id="game-url" type="text" placeholder="Website address">
+        <input id="game-icon" type="text" placeholder="Icon (e.g. 🎮)" maxlength="8">
+        <input id="game-desc" type="text" placeholder="Short description">
+
+        <select id="game-category">
+            <option value="CHESS ARENA">Chess Arena</option>
+            <option value="WORLD EXPLORER">World Explorer</option>
+            <option value="GAMING ARENA">Gaming Arena</option>
+            <option value="OTHER">Other</option>
+        </select>
+
+        <div class="modal-buttons">
+            <button id="cancel-button">CANCEL</button>
+            <button class="save" id="save-button">ADD GAME</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// CLOCK
+
+function updateClock() {
+    const now = new Date();
+
+    document.getElementById('clock').textContent =
+        now.toLocaleTimeString('pl-PL');
+
+    document.getElementById('date').textContent =
+        now.toLocaleDateString('pl-PL', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+}
+
+updateClock();
+setInterval(updateClock, 1000);
+
+
+// CUSTOM GAMES
+
+const modal = document.getElementById('modal');
+const customGrid = document.getElementById('custom-grid');
+const addButton = document.getElementById('add-button');
+
+function openModal() {
+    modal.classList.add('active');
+}
+
+function closeModal() {
+    modal.classList.remove('active');
+}
+
+addButton.addEventListener('click', openModal);
+document.getElementById('cancel-button').addEventListener('click', closeModal);
+
+function loadGames() {
+    const games = JSON.parse(localStorage.getItem('arenaGames') || '[]');
+
+    customGrid.innerHTML = '';
+
+    games.forEach((game, index) => {
+        const card = document.createElement('a');
+        card.className = 'card';
+        card.href = game.url;
+        card.target = '_blank';
+        card.rel = 'noopener';
+
+        const icon = document.createElement('span');
+        icon.className = 'card-icon';
+        icon.textContent = game.icon || '🎮';
+
+        const name = document.createElement('span');
+        name.className = 'card-name';
+        name.textContent = game.name;
+
+        const desc = document.createElement('span');
+        desc.className = 'card-desc';
+        desc.textContent = game.desc || 'Custom game';
+
+        card.append(icon, name, desc);
+
+        card.addEventListener('contextmenu', event => {
+            event.preventDefault();
+            if (confirm('Remove ' + game.name + ' from your arena?')) {
+                const updated = games.filter((_, i) => i !== index);
+                localStorage.setItem('arenaGames', JSON.stringify(updated));
+                loadGames();
+            }
+        });
+
+        customGrid.appendChild(card);
+    });
+
+    customGrid.appendChild(addButton);
+}
+
+document.getElementById('save-button').addEventListener('click', () => {
+    const name = document.getElementById('game-name').value.trim();
+    let url = document.getElementById('game-url').value.trim();
+    const icon = document.getElementById('game-icon').value.trim() || '🎮';
+    const desc = document.getElementById('game-desc').value.trim();
+
+    if (!name || !url) {
+        alert('Enter the game name and website address.');
+        return;
+    }
+
+    if (!/^https?:\/\//i.test(url)) {
+        url = 'https://' + url;
+    }
+
+    try {
+        const parsed = new URL(url);
+        if (!['http:', 'https:'].includes(parsed.protocol)) throw new Error();
+        url = parsed.href;
+    } catch {
+        alert('Enter a valid website address.');
+        return;
+    }
+
+    const games = JSON.parse(localStorage.getItem('arenaGames') || '[]');
+
+    games.push({ name, url, icon, desc });
+
+    localStorage.setItem('arenaGames', JSON.stringify(games));
+
+    ['game-name', 'game-url', 'game-icon', 'game-desc'].forEach(id => {
+        document.getElementById(id).value = '';
+    });
+
+    closeModal();
+    loadGames();
+});
+
+loadGames();
+
+
+// SEARCH
+
+document.getElementById('search').addEventListener('input', function() {
+    const query = this.value.toLowerCase().trim();
+    let visibleCount = 0;
+
+    document.querySelectorAll('.category').forEach(section => {
+        let sectionVisible = 0;
+
+        section.querySelectorAll('.card:not(.add-card)').forEach(card => {
+            const match = card.textContent.toLowerCase().includes(query);
+            card.style.display = match ? 'flex' : 'none';
+
+            if (match) sectionVisible++;
+        });
+
+        section.style.display = sectionVisible > 0 || section.id === 'custom-section' && !query
+            ? 'block' : 'none';
+
+        visibleCount += sectionVisible;
+    });
+
+    document.getElementById('no-results').style.display =
+        visibleCount === 0 ? 'block' : 'none';
+});
+
+
+// CLOSE MODAL WHEN CLICKING OUTSIDE
+
+modal.addEventListener('click', event => {
+    if (event.target === modal) closeModal();
+});
+</script>
+
+</body>
+</html>
