@@ -6,7 +6,7 @@
     const status = get('radio-status');
     const feedback = get('radio-feedback');
     const storageKey = 'szkudek-personal-radio-v1';
-    const empty = () => ({ version: 1, categories: [], stations: [] });
+    const empty = () => ({ version: 1, categories: [], stations: [], volume: 0.5, muted: false });
     let state = empty();
     let selectedCategory = '';
     let selectedStation = '';
@@ -39,7 +39,10 @@
             stationIds.add(station.id);
             return { id: station.id, categoryId: station.categoryId, name: station.name.trim(), url };
         });
-        return { version: 1, categories, stations: checkedStations };
+        const volume = data.volume === undefined ? 0.5 : data.volume;
+        const muted = data.muted === undefined ? false : data.muted;
+        if (!Number.isFinite(volume) || volume < 0 || volume > 1 || typeof muted !== 'boolean') throw new Error('Nieprawidłowa głośność w kopii ustawień.');
+        return { version: 1, categories, stations: checkedStations, volume, muted };
     }
 
     try {
@@ -74,6 +77,9 @@
     }
 
     function render() {
+        audio.volume = state.volume;
+        audio.muted = state.muted;
+        syncVolumeUI();
         if (!state.categories.some(item => item.id === selectedCategory)) selectedCategory = state.categories[0]?.id || '';
         genre.replaceChildren(...(state.categories.length
             ? state.categories.map(item => new Option(item.name, item.id))
@@ -159,6 +165,25 @@
         } finally {
             event.target.value = '';
         }
+    });
+
+    function syncVolumeUI() {
+        const percent = audio.muted ? 0 : Math.round(audio.volume * 100);
+        get('radio-volume').value = percent;
+        get('radio-volume-value').textContent = `${percent}%`;
+    }
+    get('radio-volume').addEventListener('input', event => {
+        const level = Number(event.target.value) / 100;
+        audio.volume = level;
+        audio.muted = level === 0;
+        syncVolumeUI();
+    });
+    audio.addEventListener('volumechange', () => {
+        syncVolumeUI();
+        if (state.volume === audio.volume && state.muted === audio.muted) return;
+        state.volume = audio.volume;
+        state.muted = audio.muted;
+        save(state);
     });
 
     audio.addEventListener('playing', () => {
