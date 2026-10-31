@@ -102,6 +102,76 @@ h1 {
     box-shadow: 0 0 24px rgba(197,165,104,.08);
 }
 
+.header-status {
+    margin-top: 28px;
+}
+
+.header-status .datetime { margin-top: 0; }
+
+.header-utilities {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin-top: 20px;
+}
+
+.radio-panel {
+    width: min(100%, 260px);
+    margin-left: auto;
+    padding: 10px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: rgba(32,35,28,.9);
+    text-align: left;
+    min-width: 0;
+}
+
+.radio-panel h2 {
+    color: var(--gold-light);
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-bottom: 6px;
+}
+
+.radio-pickers {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 5px;
+}
+
+.radio-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+.radio-panel select,
+.radio-panel button {
+    font: inherit;
+    font-size: 12px;
+    background: var(--bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 8px;
+}
+
+.radio-panel select { width: 100%; min-width: 0; padding: 5px 2px; font-size: 11px; }
+.radio-panel button { cursor: pointer; margin-top: 8px; }
+.radio-panel button:disabled { cursor: wait; opacity: .6; }
+.radio-panel :focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+.radio-panel audio { display: block; width: 100%; height: 28px; margin-top: 6px; }
+.radio-status { font-size: 11px; color: var(--muted); line-height: 1.5; margin-top: 8px; }
+.radio-source { color: var(--gold); font-size: 10px; }
+
+.radio-info { margin-top: 5px; }
+.radio-info summary { font-size: 10px; color: var(--muted); cursor: pointer; }
+
 #clock {
     font-size: clamp(36px, 8vw, 44px);
     font-weight: 600;
@@ -121,7 +191,7 @@ h1 {
     display: flex;
     justify-content: flex-start;
     gap: 10px;
-    margin-top: 20px;
+    margin-top: 0;
 }
 
 .discord-shortcut,
@@ -412,11 +482,15 @@ footer span {
     <h1>SZKUDEK COMMANDCENTER</h1>
     <div class="subtitle">Your personal gaming headquarters</div>
 
-    <div class="datetime">
-        <div id="clock">00:00:00</div>
-        <div id="date"></div>
+    <div class="header-status">
+        <div class="datetime">
+            <div id="clock">00:00:00</div>
+            <div id="date"></div>
+        </div>
+
     </div>
 
+    <div class="header-utilities">
     <div class="header-shortcuts">
         <a class="discord-shortcut" href="discord://-/channels/@me" aria-label="Otwórz aplikację Discord" title="Otwórz aplikację Discord">
             <img src="assets/discord-logo.svg" alt="" width="26" height="26">
@@ -427,6 +501,30 @@ footer span {
         <a class="codex-shortcut" href="https://chatgpt.com/codex" target="_blank" rel="noopener" aria-label="Otwórz Codex" title="Otwórz Codex">
             <img src="assets/codex-icon.svg" alt="" width="26" height="26">
         </a>
+    </div>
+        <section class="radio-panel" aria-labelledby="radio-title">
+            <h2 id="radio-title">♫ RADIO</h2>
+            <div class="radio-pickers">
+            <label class="radio-label" for="radio-genre">Klimat</label>
+            <select id="radio-genre">
+                <option value="rap-pl">Polski rap</option>
+                <option value="rap-world">Zagraniczny rap</option>
+                <option value="reggae-pl">Polskie reggae</option>
+                <option value="reggae-world">Zagraniczne reggae</option>
+            </select>
+            <label class="radio-label" for="radio-station">Stacja</label>
+            <select id="radio-station" disabled>
+                <option value="">Wczytywanie stacji…</option>
+            </select>
+            </div>
+            <audio id="radio-audio" controls preload="none" aria-label="Odtwarzacz radia internetowego"></audio>
+            <details class="radio-info">
+            <summary>Informacje o stacji</summary>
+            <p class="radio-status" id="radio-status" role="status" aria-live="polite">Wczytywanie stacji…</p>
+            <button type="button" id="radio-reload">Odśwież stacje</button>
+            <a class="radio-source" href="https://www.radio-browser.info/" target="_blank" rel="noopener">Katalog Radio Browser</a>
+            </details>
+        </section>
     </div>
 </header>
 
@@ -570,6 +668,7 @@ footer span {
 
 </div>
 
+<script src="assets/radio.js" defer></script>
 <script>
 // CLOCK
 
