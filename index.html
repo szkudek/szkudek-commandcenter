@@ -585,6 +585,7 @@ footer span {
     .shop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 </style>
+<link rel="stylesheet" href="assets/dashboard.css">
 </head>
 
 <body>
@@ -666,9 +667,48 @@ footer span {
         autocomplete="off">
 </div>
 
+<div class="dashboard-toolbar" aria-label="Personalizacja strony">
+    <button type="button" id="add-tile">＋ Dodaj kafelek</button>
+    <button type="button" id="edit-layout" aria-pressed="false">↔ Edytuj układ</button>
+    <details class="backup-menu">
+        <summary>Kopia ustawień</summary>
+        <div class="backup-actions">
+            <button type="button" id="dashboard-export">Eksportuj wszystko</button>
+            <button type="button" id="dashboard-import">Importuj kopię</button>
+            <input type="file" id="dashboard-import-file" accept="application/json,.json" hidden>
+            <p>Radio, notatki, ulubione, własne kafelki, układ i timer w jednym pliku.</p>
+        </div>
+    </details>
+</div>
+<p class="dashboard-status" id="dashboard-status" role="status" aria-live="polite"></p>
+<p class="layout-help" id="layout-help" hidden>Przeciągnij kafelek za uchwyt ⠿ w obrębie sekcji lub użyj przycisków ← i →. Własne kafelki możesz edytować i usuwać. Zmiany zapisują się automatycznie.</p>
+<div class="workspace-tools">
+    <details class="utility-panel" id="notes-panel">
+        <summary>✎ Notatnik</summary>
+        <label for="personal-notes">Twoje notatki</label>
+        <textarea id="personal-notes" rows="6" maxlength="100000" placeholder="Pomysły, zadania, plan treningu…"></textarea>
+        <p id="notes-status" class="utility-help">Zapis automatyczny w tej przeglądarce.</p>
+    </details>
+    <details class="utility-panel" id="focus-panel">
+        <summary>◷ Timer skupienia</summary>
+        <div class="focus-settings">
+            <label for="focus-minutes">Skupienie (min)<input id="focus-minutes" type="number" min="1" max="180" value="25" required></label>
+            <label for="break-minutes">Przerwa (min)<input id="break-minutes" type="number" min="1" max="60" value="5" required></label>
+        </div>
+        <p id="focus-phase">Skupienie</p>
+        <output id="focus-countdown" aria-label="Pozostały czas">25:00</output>
+        <div class="focus-actions">
+            <button type="button" id="focus-start">Start</button>
+            <button type="button" id="focus-reset">Od nowa</button>
+            <button type="button" id="focus-skip">Przejdź do przerwy</button>
+        </div>
+        <p id="focus-status" class="utility-help" role="status" aria-live="polite">Rozpocznij swoją sesję skupienia.</p>
+    </details>
+</div>
+
 <main id="sections">
 
-<section class="category chess-center">
+<section class="category chess-center" id="chess-section">
     <div class="category-header">
         <span class="category-icon">♟</span>
         <h2>CENTRUM SZACHOW</h2>
@@ -696,7 +736,7 @@ footer span {
     </div>
 </section>
 
-<section class="category">
+<section class="category" id="learn-section">
     <div class="category-header">
         <span class="category-icon">📚</span>
         <h2>Ucz sie Szachow</h2>
@@ -719,7 +759,7 @@ footer span {
     </div>
 </section>
 
-<section class="category">
+<section class="category" id="gaming-section">
     <div class="category-header">
         <span class="category-icon">🎮</span>
         <h2>GAMING ARENA</h2>
@@ -839,7 +879,7 @@ footer span {
 </main>
 
 <div class="no-results" id="no-results">
-    No games found in your arena.
+    Brak pasujących kafelków.
 </div>
 
 <footer>
@@ -850,7 +890,34 @@ footer span {
 
 </div>
 
+<dialog id="tile-dialog" class="tile-dialog" aria-labelledby="tile-dialog-title">
+    <form id="tile-form">
+        <h2 id="tile-dialog-title">Dodaj kafelek</h2>
+        <label for="tile-name">Nazwa</label>
+        <input id="tile-name" maxlength="80" required>
+        <label for="tile-url">Adres strony</label>
+        <input id="tile-url" type="url" placeholder="https://…" maxlength="4096" required>
+        <label for="tile-section">Sekcja</label>
+        <select id="tile-section">
+            <option value="chess-section">Centrum Szachów</option>
+            <option value="learn-section">Ucz sie Szachow</option>
+            <option value="gaming-section">Gaming Arena</option>
+            <option value="socials-section">Socials</option>
+            <option value="shops-section">Sklepy</option>
+        </select>
+        <label for="tile-icon">Ikona lub emoji</label>
+        <input id="tile-icon" maxlength="8" placeholder="🔗">
+        <label for="tile-description">Krótki opis (opcjonalnie)</label>
+        <input id="tile-description" maxlength="120">
+        <p id="tile-form-status" role="status"></p>
+        <div class="dialog-actions">
+            <button type="button" id="tile-cancel">Anuluj</button>
+            <button type="submit">Zapisz kafelek</button>
+        </div>
+    </form>
+</dialog>
 <script src="assets/radio.js" defer></script>
+<script src="assets/dashboard.js" defer></script>
 <script>
 // CLOCK
 
@@ -872,60 +939,6 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 1000);
 
-
-// GEOGAMES AND SEARCH
-
-const geoGames = document.getElementById('geo-games');
-const geoToggle = document.getElementById('geo-toggle');
-const geoLinks = Array.from(geoGames.querySelectorAll('a.card'));
-let geoManuallyOpen = false;
-
-function setGeoOpen(open) {
-    geoGames.hidden = !open;
-    geoToggle.setAttribute('aria-expanded', String(open));
-    document.getElementById('geo-toggle-label').textContent = open ? 'Gry rozwinięte · kliknij, aby zwinąć' : 'Wybierz grę · 3 gry';
-}
-
-geoToggle.addEventListener('click', () => {
-    geoManuallyOpen = geoGames.hidden;
-    setGeoOpen(geoManuallyOpen);
-});
-
-function closeGeoPanel() {
-    geoManuallyOpen = false;
-    setGeoOpen(false);
-    geoToggle.focus();
-}
-
-document.getElementById('geo-close').addEventListener('click', closeGeoPanel);
-geoGames.addEventListener('keydown', event => {
-    if (event.key === 'Escape') {
-        event.preventDefault();
-        closeGeoPanel();
-    }
-});
-
-document.getElementById('search').addEventListener('input', function() {
-    const query = this.value.toLowerCase().trim();
-    const geoGroupMatch = !!query && 'geogames'.includes(query);
-    const geoChildMatch = !!query && geoLinks.some(card => card.textContent.toLowerCase().includes(query));
-    setGeoOpen(query ? geoGroupMatch || geoChildMatch : geoManuallyOpen);
-    let visibleCount = 0;
-
-    document.querySelectorAll('.category').forEach(section => {
-        let sectionVisible = 0;
-        section.querySelectorAll('.card').forEach(card => {
-            const match = card.textContent.toLowerCase().includes(query) ||
-                (geoGroupMatch && geoGames.contains(card)) ||
-                (card === geoToggle && geoChildMatch);
-            card.style.display = match ? 'flex' : 'none';
-            if (match) sectionVisible++;
-        });
-        section.style.display = sectionVisible > 0 ? 'block' : 'none';
-        visibleCount += sectionVisible;
-    });
-    document.getElementById('no-results').style.display = visibleCount === 0 ? 'block' : 'none';
-});
 
 </script>
 

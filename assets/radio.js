@@ -169,5 +169,17 @@
     audio.addEventListener('error', () => {
         if (audio.getAttribute('src')) status.textContent = 'Nie można odtworzyć stacji. Sprawdź bezpośredni adres audio HTTPS lub wybierz inną stację.';
     });
+    window.CommandCenterRadio = {
+        storageKey,
+        exportData: () => validate(state),
+        validateData: validate,
+        reloadSettings() {
+            const saved = localStorage.getItem(storageKey);
+            state = saved ? validate(JSON.parse(saved)) : empty();
+            selectedCategory = '';
+            selectedStation = '';
+            render();
+        }
+    };
     render();
 })();
