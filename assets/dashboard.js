@@ -25,7 +25,7 @@
     };
     const notify = text => { get('dashboard-status').textContent = text; };
     const defaults = () => ({
-        version: 1, notes: '', favorites: [], customTiles: [],
+        version: 1, notes: [], activeNoteId: null, favorites: [], customTiles: [],
         layout: { order: {}, collapsed: [] }
     });
 
@@ -58,6 +58,25 @@
         if (!['https:', 'http:'].includes(url.protocol) || url.username || url.password) throw new Error('Podaj adres HTTP lub HTTPS bez danych logowania.');
         return url.href;
     }
+    function validateNotes(value) {
+        if (typeof value === 'string') {
+            const body = text(value, 100000, true);
+            return body.length ? [{ id: 'note:legacy', title: 'Dotychczasowa notatka', category: 'Ogólne', body, updatedAt: 0 }] : [];
+        }
+        if (!Array.isArray(value) || value.length > 200) throw new Error('Nieprawidłowa lista notatek (maksymalnie 200).');
+        const ids = new Set();
+        let totalLength = 0;
+        return value.map(note => {
+            const id = text(note.id, 100);
+            if (!id.startsWith('note:') || ids.has(id)) throw new Error('Nieprawidłowy lub powtórzony identyfikator notatki.');
+            ids.add(id);
+            const body = text(note.body, 100000, true);
+            totalLength += body.length;
+            if (totalLength > 1000000) throw new Error('Notatki mogą zawierać łącznie maksymalnie milion znaków.');
+            if (!Number.isFinite(note.updatedAt) || note.updatedAt < 0 || note.updatedAt > 8640000000000000) throw new Error('Nieprawidłowa data notatki.');
+            return { id, title: text(note.title, 100, true).trim() || 'Bez tytułu', category: text(note.category, 60, true).trim() || 'Ogólne', body, updatedAt: note.updatedAt };
+        });
+    }
     function validate(data) {
         if (!data || data.version !== 1 || !Array.isArray(data.customTiles) || data.customTiles.length > 500) throw new Error('Nieprawidłowa kopia ustawień strony.');
         const ids = new Set(builtinIds);
@@ -79,7 +98,9 @@
             order[group] = idList(list, ids);
         });
         const collapsed = idList(data.layout.collapsed, new Set(allSectionIds), allSectionIds.length);
-        return { version: 1, notes: text(data.notes, 100000, true), favorites, customTiles, layout: { order, collapsed } };
+        const notes = validateNotes(data.notes);
+        const activeNoteId = notes.some(note => note.id === data.activeNoteId) ? data.activeNoteId : notes[0]?.id || null;
+        return { version: 1, notes, activeNoteId, favorites, customTiles, layout: { order, collapsed } };
     }
     try {
         const saved = localStorage.getItem(storageKey);
@@ -355,21 +376,79 @@
     });
     function renderTiles() { renderCustom(); renderFavorites(); applyFilter(); }
 
-    get('notes-shortcut').addEventListener('click', () => get('notes-dialog').showModal());
-    get('notes-close').addEventListener('click', () => get('notes-dialog').close());
-    get('notes-dialog').addEventListener('close', () => {
+    function activeNote() { return state.notes.find(note => note.id === state.activeNoteId); }
+    function renderNotebook(editor = true) {
+        const filter = get('notes-filter');
+        const categories = [...new Set(state.notes.map(note => note.category))].sort((a, b) => a.localeCompare(b, 'pl'));
+        const selectedCategory = categories.includes(filter.value) ? filter.value : '';
+        filter.replaceChildren(new Option('Wszystkie kategorie', ''), ...categories.map(category => new Option(category, category)));
+        filter.value = selectedCategory;
+        const matching = state.notes.filter(note => !selectedCategory || note.category === selectedCategory);
+        if (!matching.some(note => note.id === state.activeNoteId)) state.activeNoteId = matching[0]?.id || null;
+        get('notes-list').replaceChildren(...(matching.length ? matching.map(note => new Option(note.title, note.id)) : [new Option('Brak notatek', '')]));
+        get('notes-list').value = state.activeNoteId || '';
+        get('notes-list').disabled = matching.length === 0;
+        get('notes-categories').replaceChildren(...categories.map(category => new Option(category, category)));
+        const note = activeNote();
+        ['note-title', 'note-category', 'personal-notes', 'notes-delete', 'notes-save'].forEach(id => { get(id).disabled = !note; });
+        if (editor) {
+            get('note-title').value = note?.title || '';
+            get('note-category').value = note?.category || '';
+            get('personal-notes').value = note?.body || '';
+        }
+    }
+    function flushNotes() {
         clearTimeout(noteSaveTimer);
-        get('notes-status').textContent = persist('') ? 'Zapisano automatycznie w tej przeglądarce.' : 'Nie zapisano — wyeksportuj kopię.';
+        const saved = persist('');
+        get('notes-status').textContent = saved ? 'Zapisano notatki automatycznie w tej przeglądarce.' : 'Nie zapisano — wyeksportuj kopię.';
+        return saved;
+    }
+    get('notes-shortcut').addEventListener('click', () => {
+        renderNotebook();
+        get('notes-dialog').showModal();
+        get(activeNote() ? 'personal-notes' : 'notes-new').focus();
     });
-    get('personal-notes').value = state.notes;
-    get('personal-notes').addEventListener('input', event => {
-        state.notes = event.target.value;
+    get('notes-close').addEventListener('click', () => get('notes-dialog').close());
+    get('notes-dialog').addEventListener('close', flushNotes);
+    get('notes-new').addEventListener('click', () => {
+        if (state.notes.length >= 200) { get('notes-status').textContent = 'Możesz zapisać maksymalnie 200 notatek.'; return; }
+        flushNotes();
+        const note = { id: `note:${crypto.randomUUID()}`, title: 'Bez tytułu', category: get('notes-filter').value || 'Ogólne', body: '', updatedAt: Date.now() };
+        state.notes.push(note); state.activeNoteId = note.id;
+        renderNotebook(); flushNotes();
+        get('note-title').focus(); get('note-title').select();
+    });
+    get('notes-list').addEventListener('change', () => {
+        flushNotes(); state.activeNoteId = get('notes-list').value;
+        renderNotebook(); flushNotes();
+    });
+    get('notes-filter').addEventListener('change', () => { flushNotes(); renderNotebook(); flushNotes(); });
+    ['note-title', 'note-category', 'personal-notes'].forEach(id => get(id).addEventListener('input', event => {
+        const note = activeNote();
+        if (!note) return;
+        const value = event.target.value;
+        if (id === 'personal-notes') {
+            const total = state.notes.reduce((sum, other) => sum + (other === note ? value.length : other.body.length), 0);
+            if (total > 1000000) { event.target.value = note.body; get('notes-status').textContent = 'Osiągnięto limit miliona znaków we wszystkich notatkach.'; return; }
+            note.body = value;
+        } else if (id === 'note-title') note.title = value.trim() || 'Bez tytułu';
+        else { note.category = value.trim() || 'Ogólne'; get('notes-filter').value = ''; }
+        note.updatedAt = Date.now();
+        if (id !== 'personal-notes') renderNotebook(false);
         get('notes-status').textContent = 'Zapisywanie…';
         clearTimeout(noteSaveTimer);
-        noteSaveTimer = setTimeout(() => {
-            get('notes-status').textContent = persist('') ? 'Zapisano automatycznie w tej przeglądarce.' : 'Nie zapisano — wyeksportuj kopię.';
-        }, 300);
+        noteSaveTimer = setTimeout(flushNotes, 300);
+    }));
+    get('notes-save').addEventListener('click', () => { flushNotes(); renderNotebook(); });
+    get('notes-delete').addEventListener('click', () => {
+        const note = activeNote();
+        if (!note || !confirm(`Usunąć notatkę „${note.title}”?`)) return;
+        clearTimeout(noteSaveTimer);
+        state.notes = state.notes.filter(other => other.id !== note.id);
+        state.activeNoteId = null;
+        renderNotebook(); flushNotes();
     });
+    renderNotebook();
     window.addEventListener('pagehide', () => { clearTimeout(noteSaveTimer); persist(''); });
 
     function download(data, filename) {
@@ -390,7 +469,7 @@
         const file = event.target.files[0];
         if (!file) return;
         try {
-            if (file.size > 2 * 1024 * 1024) throw new Error('Kopia może mieć maksymalnie 2 MB.');
+            if (file.size > 16 * 1024 * 1024) throw new Error('Kopia może mieć maksymalnie 16 MB.');
             const data = JSON.parse(await file.text());
             if (data.app !== 'szkudek-commandcenter' || data.version !== 1) throw new Error('To nie jest wspólna kopia ustawień CommandCenter.');
             const next = validate(data.dashboard);
@@ -410,7 +489,8 @@
             clearTimeout(noteSaveTimer);
             state = next;
             radio.reloadSettings();
-            get('personal-notes').value = state.notes;
+            get('notes-filter').value = '';
+            renderNotebook();
             get('notes-status').textContent = 'Przywrócono notatki z kopii.';
             search.value = ''; geoManuallyOpen = false;
             renderTiles();

@@ -877,9 +877,29 @@ footer span {
         <h2 id="notes-dialog-title">Notatnik</h2>
         <button type="button" id="notes-close" aria-label="Zamknij notatnik">Zamknij ×</button>
     </div>
-    <label for="personal-notes">Twoje notatki</label>
-    <textarea id="personal-notes" rows="10" maxlength="100000" placeholder="Pomysły, zadania, plan treningu…" autofocus></textarea>
-    <p id="notes-status" class="utility-help" role="status">Zapis automatyczny w tej przeglądarce.</p>
+    <div class="notebook-actions">
+        <button type="button" id="notes-new">＋ Nowa notatka</button>
+        <button type="button" id="notes-delete" disabled>Usuń notatkę</button>
+    </div>
+    <div class="notebook-selectors">
+        <div>
+            <label for="notes-filter">Kategoria</label>
+            <select id="notes-filter"><option value="">Wszystkie kategorie</option></select>
+        </div>
+        <div>
+            <label for="notes-list">Zapisane notatki</label>
+            <select id="notes-list" disabled><option value="">Brak notatek</option></select>
+        </div>
+    </div>
+    <label for="note-title">Tytuł notatki</label>
+    <input id="note-title" maxlength="100" placeholder="Np. Plan treningu szachowego" disabled>
+    <label for="note-category">Kategoria notatki</label>
+    <input id="note-category" list="notes-categories" maxlength="60" placeholder="Ogólne — możesz wpisać własną kategorię" disabled>
+    <datalist id="notes-categories"></datalist>
+    <label for="personal-notes">Treść</label>
+    <textarea id="personal-notes" rows="8" maxlength="100000" placeholder="Kliknij „Nowa notatka”, aby zacząć…" disabled></textarea>
+    <button type="button" id="notes-save" disabled>Zapisz notatkę</button>
+    <p id="notes-status" class="utility-help" role="status">Notatki zapisują się automatycznie w tej przeglądarce.</p>
 </dialog>
 
 <dialog id="tile-dialog" class="tile-dialog" aria-labelledby="tile-dialog-title">

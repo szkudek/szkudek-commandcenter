@@ -21,6 +21,12 @@
 .notes-dialog textarea { resize: vertical; min-height: 220px; max-height: 55dvh; line-height: 1.6; }
 .notes-dialog { width: min(620px, calc(100% - 28px)); }
 .notes-dialog-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.notebook-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.notebook-selectors { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 12px; }
+.notebook-selectors > div { min-width: 0; }
+.notes-dialog select { text-overflow: ellipsis; }
+.notes-dialog button:disabled { opacity: .5; cursor: not-allowed; }
+#notes-save { margin-top: 12px; }
 .utility-help { margin-top: 10px; }
 .tile-wrap { position: relative; min-width: 0; height: 200px; }
 .tile-wrap > .card { width: 100%; height: 100%; }
@@ -49,6 +55,7 @@
 #tile-form-status { color: var(--gold-light); font-size: 12px; margin-top: 12px; }
 .dashboard-toolbar :focus-visible, .tile-dialog :focus-visible, .tile-action:focus-visible, .section-toggle:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
 @media(max-width: 700px) {
+    .notebook-selectors { grid-template-columns: 1fr; gap: 0; }
     .category-header { flex-wrap: wrap; }
     .category h2 { font-size: 15px; }
     .category-count { font-size: 9px; }
