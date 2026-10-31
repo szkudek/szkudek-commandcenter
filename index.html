@@ -120,10 +120,13 @@ h1 {
 .header-shortcuts {
     display: flex;
     justify-content: flex-start;
+    gap: 10px;
     margin-top: 20px;
 }
 
-.discord-shortcut {
+.discord-shortcut,
+.chatgpt-shortcut,
+.codex-shortcut {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -140,6 +143,16 @@ h1 {
     border-color: #5865f2;
     background: var(--panel-hover);
     outline: 2px solid #5865f2;
+    outline-offset: 3px;
+}
+
+.chatgpt-shortcut:hover,
+.chatgpt-shortcut:focus-visible,
+.codex-shortcut:hover,
+.codex-shortcut:focus-visible {
+    border-color: var(--gold);
+    background: var(--panel-hover);
+    outline: 2px solid var(--gold);
     outline-offset: 3px;
 }
 
@@ -407,6 +420,12 @@ footer span {
     <div class="header-shortcuts">
         <a class="discord-shortcut" href="discord://-/channels/@me" aria-label="Otwórz aplikację Discord" title="Otwórz aplikację Discord">
             <img src="assets/discord-logo.svg" alt="" width="26" height="26">
+        </a>
+        <a class="chatgpt-shortcut" href="https://chatgpt.com/" target="_blank" rel="noopener" aria-label="Otwórz ChatGPT" title="ChatGPT — Twoje rozmowy, projekty i GPT">
+            <img src="assets/chatgpt-logo.svg" alt="" width="26" height="26">
+        </a>
+        <a class="codex-shortcut" href="https://chatgpt.com/codex" target="_blank" rel="noopener" aria-label="Otwórz Codex" title="Otwórz Codex">
+            <img src="assets/codex-icon.svg" alt="" width="26" height="26">
         </a>
     </div>
 </header>
