@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#151713">
 <title>SZKUDEK COMMANDCENTER</title>
+<link rel="preload" as="image" href="assets/commandcenter-header.webp">
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap');
@@ -27,11 +28,16 @@
     box-sizing: border-box;
 }
 
+html {
+    background-color: var(--bg);
+}
+
 body {
     background:
         radial-gradient(ellipse at 50% 0%, rgba(130,150,108,.12), transparent 50%),
         linear-gradient(rgba(20,22,17,.96), rgba(20,22,17,.98)),
         repeating-conic-gradient(#292d24 0% 25%, #1b1e18 0% 50%) 50% / 70px 70px;
+    background-color: var(--bg);
     background-attachment: fixed;
     color: var(--text);
     font-family: 'Inter', sans-serif;
@@ -48,22 +54,31 @@ body {
 
 header {
     text-align: center;
-    padding: 35px 15px 40px;
+    padding: 0 15px 40px;
     border-bottom: 1px solid var(--border);
     margin-bottom: 35px;
 }
 
 .logo-icon {
-    font-size: 120px;
-    color: var(--gold);
-    margin-bottom: 12px;
-    text-shadow: 0 0 25px rgba(197,165,104,.3);
+    margin: 0 -15px 20px;
+}
+
+.header-art {
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 440px;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 14px 14px 0 0;
+    mask-image: linear-gradient(to bottom, #000 80%, transparent);
 }
 
 h1 {
     font-family: 'Cinzel', serif;
-    font-size: clamp(34px, 6vw, 57px);
-    letter-spacing: 7px;
+    font-size: clamp(25px, 4vw, 49px);
+    letter-spacing: clamp(2px, .4vw, 5px);
+    overflow-wrap: anywhere;
     color: var(--gold-light);
     font-weight: 700;
     text-shadow: 0 3px 20px rgba(197,165,104,.12);
@@ -244,6 +259,42 @@ h1 {
     text-align: center;
 }
 
+.chess-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.chess-card {
+    min-height: 130px;
+    align-items: flex-start;
+    padding: 22px;
+    border-color: rgba(197,165,104,.6);
+    background-image: linear-gradient(90deg, rgba(10,12,8,.94), rgba(10,12,8,.5) 65%, rgba(10,12,8,.12)), var(--card-art);
+    background-size: cover;
+    background-position: center;
+}
+
+.chess-card:hover {
+    background-image: linear-gradient(90deg, rgba(10,12,8,.85), rgba(10,12,8,.35)), var(--card-art);
+    background-size: cover;
+    background-position: center;
+}
+
+.chess-card .card-name {
+    color: var(--gold-light);
+    font-family: 'Cinzel', serif;
+    text-align: left;
+    overflow-wrap: anywhere;
+}
+
+.chess-card .card-desc {
+    color: #d0c9b8;
+    text-align: left;
+}
+
+.chesscom-card { --card-art: url('assets/chesscom.webp'); }
+.lichess-card { --card-art: url('assets/lichess.webp'); }
+.oldgames-card { --card-art: url('assets/oldgames-chess.webp'); }
+
 .geo-games[open] {
     grid-column: 1 / -1;
 }
@@ -372,10 +423,11 @@ footer span {
 
 @media(max-width: 550px) {
     body { padding: 15px 13px 40px; }
-    header { padding-top: 30px; }
-    h1 { letter-spacing: 4px; }
+    .header-art { min-height: 210px; object-fit: cover; }
     .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
     .card { min-height: 125px; }
+    .chess-grid { grid-template-columns: 1fr; }
+    .chess-card { min-height: 115px; }
 }
 </style>
 </head>
@@ -384,7 +436,9 @@ footer span {
 <div class="container">
 
 <header>
-    <div class="logo-icon">♛</div>
+    <div class="logo-icon">
+        <img class="header-art" src="assets/commandcenter-header.webp" alt="Złoty hetman na szachownicy z mapą i radarem w tle" width="1983" height="793" fetchpriority="high">
+    </div>
     <h1>SZKUDEK COMMANDCENTER</h1>
     <div class="subtitle">Your personal gaming headquarters</div>
 
@@ -410,20 +464,20 @@ footer span {
         <span class="category-count">01 / CHESS</span>
     </div>
 
-    <div class="grid">
-        <a class="card" href="https://www.chess.com/" target="_blank" rel="noopener">
+    <div class="grid chess-grid">
+        <a class="card chess-card chesscom-card" href="https://www.chess.com/" target="_blank" rel="noopener">
             <span class="card-icon">♟️</span>
             <span class="card-name">CHESS.COM</span>
             <span class="card-desc">Play • Learn • Compete</span>
         </a>
 
-        <a class="card" href="https://lichess.org/" target="_blank" rel="noopener">
+        <a class="card chess-card lichess-card" href="https://lichess.org/" target="_blank" rel="noopener">
             <span class="card-icon">♞</span>
             <span class="card-name">LICHESS</span>
             <span class="card-desc">Free online chess</span>
         </a>
 
-        <a class="card" href="https://css-gather.kienek.pl/#/chess" target="_blank" rel="noopener">
+        <a class="card chess-card oldgames-card" href="https://css-gather.kienek.pl/#/chess" target="_blank" rel="noopener">
             <span class="card-icon">♞</span>
             <span class="card-name">OldGamesArena CHESS</span>
             <span class="card-desc">Zagraj w szachy</span>
