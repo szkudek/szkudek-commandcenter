@@ -512,6 +512,29 @@ h1 {
 @keyframes geo-reveal { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
 @media(prefers-reduced-motion: reduce) { .geo-panel { animation: none; } .geo-chevron { transition: none; } }
 
+.shop-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+}
+
+.shop-card {
+    height: 100px;
+    padding: 12px;
+    gap: 8px;
+}
+
+.shop-logo { width: 100px; height: 38px; object-fit: contain; }
+
+.shop-mark {
+    color: var(--shop-color, var(--gold-light));
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -.5px;
+    line-height: 1.2;
+}
+
+.shop-card .card-name { font-size: 11px; overflow-wrap: anywhere; }
+
 /* FOOTER */
 
 footer {
@@ -540,6 +563,7 @@ footer span {
     .header-art { min-height: 210px; object-fit: cover; }
     .grid { grid-template-columns: 1fr; gap: 10px; }
     .chess-grid { grid-template-columns: 1fr; }
+    .shop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 </style>
 </head>
@@ -743,6 +767,52 @@ footer span {
         <a class="card" href="https://www.facebook.com/" target="_blank" rel="noopener">
             <span class="card-icon"><img class="service-logo" src="assets/facebook-logo.svg" alt="" width="38" height="38"></span>
             <span class="card-name">Facebook</span>
+        </a>
+    </div>
+</section>
+
+<section class="category" id="shops-section">
+    <div class="category-header">
+        <span class="category-icon">🛒</span>
+        <h2>Sklepy</h2>
+        <span class="category-count">05 / SHOPS</span>
+    </div>
+    <div class="grid shop-grid">
+        <a class="card shop-card" href="https://allegro.pl/" target="_blank" rel="noopener" style="--shop-color: #ff5a00">
+            <img class="shop-logo" src="assets/shop-allegro.svg" alt="" width="100" height="38">
+            <span class="card-name">Allegro</span>
+        </a>
+        <a class="card shop-card" href="https://www.mediaexpert.pl/" target="_blank" rel="noopener" style="--shop-color: #ffe600">
+            <span class="shop-mark" aria-hidden="true">ME</span>
+            <span class="card-name">Media Expert</span>
+        </a>
+        <a class="card shop-card" href="https://www.euro.com.pl/" target="_blank" rel="noopener" style="--shop-color: #ffe500">
+            <span class="shop-mark" aria-hidden="true">EURO</span>
+            <span class="card-name">RTV EURO AGD</span>
+        </a>
+        <a class="card shop-card" href="https://www.empik.com/" target="_blank" rel="noopener" style="--shop-color: #ffffff">
+            <span class="shop-mark" aria-hidden="true">empik</span>
+            <span class="card-name">Empik</span>
+        </a>
+        <a class="card shop-card" href="https://store.steampowered.com/" target="_blank" rel="noopener" style="--shop-color: #66c0f4">
+            <img class="shop-logo" src="assets/shop-steam.svg" alt="" width="100" height="38">
+            <span class="card-name">Steam Store</span>
+        </a>
+        <a class="card shop-card" href="https://www.g2a.com/" target="_blank" rel="noopener" style="--shop-color: #f7941d">
+            <img class="shop-logo" src="assets/shop-g2a.svg" alt="" width="100" height="38">
+            <span class="card-name">G2A</span>
+        </a>
+        <a class="card shop-card" href="https://www.kinguin.net/" target="_blank" rel="noopener" style="--shop-color: #ff7b22">
+            <span class="shop-mark" aria-hidden="true">KINGUIN</span>
+            <span class="card-name">Kinguin</span>
+        </a>
+        <a class="card shop-card" href="https://www.amazon.pl/" target="_blank" rel="noopener" style="--shop-color: #ff9900">
+            <img class="shop-logo" src="assets/shop-amazon.svg" alt="" width="100" height="38">
+            <span class="card-name">Amazon</span>
+        </a>
+        <a class="card shop-card" id="bratko-shop" href="https://sklep.bratkobaits.com/" target="_blank" rel="noopener">
+            <span class="shop-mark" aria-hidden="true">🎣</span>
+            <span class="card-name">Bratko Baits</span>
         </a>
     </div>
 </section>
