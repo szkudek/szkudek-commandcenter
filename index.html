@@ -54,7 +54,7 @@ header {
 }
 
 .logo-icon {
-    font-size: 43px;
+    font-size: 60px;
     color: var(--gold);
     margin-bottom: 12px;
     text-shadow: 0 0 25px rgba(197,165,104,.3);
@@ -79,11 +79,18 @@ h1 {
 
 .datetime {
     margin-top: 28px;
+    display: inline-block;
+    padding: 18px 28px;
+    border: 1px solid var(--gold);
+    border-radius: 12px;
+    background: rgba(32,35,28,.9);
+    box-shadow: 0 0 24px rgba(197,165,104,.08);
 }
 
 #clock {
-    font-size: 29px;
+    font-size: clamp(36px, 8vw, 44px);
     font-weight: 600;
+    font-variant-numeric: tabular-nums;
     letter-spacing: 3px;
     color: var(--text);
 }
@@ -360,7 +367,7 @@ footer span {
 <div class="container">
 
 <header>
-    <div class="logo-icon">♟</div>
+    <div class="logo-icon">♛</div>
     <h1>ARENA GAMING</h1>
     <div class="subtitle">Your personal gaming headquarters</div>
 
@@ -480,7 +487,7 @@ footer span {
 </div>
 
 <footer>
-    <span>♟</span> ARENA GAMING <span>♟</span>
+    <span>♛</span> ARENA GAMING <span>♛</span>
     <br><br>
     YOUR GAME. YOUR RULES.
 </footer>
