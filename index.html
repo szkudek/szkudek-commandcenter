@@ -314,13 +314,14 @@ h1 {
 
 .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 14px;
 }
 
 .card {
     position: relative;
-    min-height: 145px;
+    height: 200px;
+    min-width: 0;
     padding: 23px 15px;
     border: 1px solid var(--border);
     border-radius: 11px;
@@ -387,7 +388,6 @@ h1 {
 }
 
 .chess-card {
-    min-height: 130px;
     align-items: flex-start;
     padding: 22px;
     border-color: rgba(197,165,104,.6);
@@ -425,9 +425,41 @@ h1 {
     filter: invert(1);
 }
 
+.wordmark-logo {
+    width: 180px;
+    max-width: 100%;
+    object-position: left center;
+}
+
+.local-logo {
+    width: 180px;
+    max-width: 100%;
+    height: 64px;
+    object-position: left center;
+    border-radius: 4px;
+}
+
+.local-logo.square-wordmark { object-fit: cover; object-position: center; }
+.local-logo.badge-logo { width: 64px; }
+
 .oldgames-logo {
     width: 210px;
     max-width: 100%;
+    height: auto;
+}
+
+.chess-center .service-logo {
+    width: 64px;
+    height: 64px;
+}
+
+#socials-section .service-logo {
+    width: 64px;
+    height: 64px;
+}
+
+.chess-center .oldgames-logo {
+    width: 300px;
     height: auto;
 }
 
@@ -489,11 +521,9 @@ footer span {
 @media(max-width: 550px) {
     body { padding: 15px 13px 40px; }
     .header-art { min-height: 210px; object-fit: cover; }
-    .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .card { min-height: 125px; }
+    .grid { grid-template-columns: 1fr; gap: 10px; }
     .chess-grid { grid-template-columns: 1fr; }
     .geo-games[open] > summary { width: 100%; }
-    .chess-card { min-height: 115px; }
 }
 </style>
 </head>
@@ -579,7 +609,7 @@ footer span {
 
 <main id="sections">
 
-<section class="category">
+<section class="category chess-center">
     <div class="category-header">
         <span class="category-icon">♟</span>
         <h2>CENTRUM SZACHOW</h2>
@@ -616,13 +646,13 @@ footer span {
 
     <div class="grid chess-grid">
         <a class="card chess-card chessbase-card" href="https://www.chessbase.com/" target="_blank" rel="noopener">
-            <span class="card-icon">♜</span>
+            <img class="service-logo local-logo badge-logo" src="assets/chessbase-logo.webp" alt="" width="180" height="64">
             <span class="card-name">CHESSBASE</span>
             <span class="card-desc">Chess database & news</span>
         </a>
 
         <a class="card chess-card chessable-card" href="https://www.chessable.com/" target="_blank" rel="noopener">
-            <span class="card-icon">♛</span>
+            <img class="service-logo local-logo square-wordmark" src="assets/chessable-logo.webp" alt="" width="180" height="64">
             <span class="card-name">CHESSABLE</span>
             <span class="card-desc">Train your openings</span>
         </a>
@@ -639,8 +669,8 @@ footer span {
 
     <div class="grid chess-grid">
         <a class="card chess-card css-gather-card" href="https://css-gather.kienek.pl/" target="_blank" rel="noopener">
-            <span class="card-icon">🎯</span>
-            <span class="card-name">CSS GATHER</span>
+            <img class="service-logo oldgames-logo" src="assets/oldgames-logo.webp" alt="OldGamesArena" width="210" height="70">
+            <span class="card-name">OldGamesArena</span>
             <span class="card-desc">Enter the arena</span>
         </a>
 
@@ -652,19 +682,19 @@ footer span {
             </summary>
             <div class="grid chess-grid geo-options">
         <a class="card chess-card geoguessr-card" href="https://www.geoguessr.com/" target="_blank" rel="noopener">
-            <span class="card-icon">🌎</span>
+            <img class="service-logo local-logo square-wordmark" src="assets/geoguessr-logo.webp" alt="" width="180" height="64">
             <span class="card-name">GEOGUESSR</span>
             <span class="card-desc">Explore the world</span>
         </a>
 
         <a class="card chess-card seterra-card" href="https://www.seterra.com/" target="_blank" rel="noopener">
-            <span class="card-icon">🗺️</span>
+            <img class="service-logo local-logo" src="assets/seterra-logo.webp" alt="" width="180" height="64">
             <span class="card-name">SETERRA</span>
             <span class="card-desc">Geography quizzes</span>
         </a>
 
         <a class="card chess-card worldle-card" href="https://worldle.teuteuf.fr/" target="_blank" rel="noopener">
-            <span class="card-icon">🌐</span>
+            <img class="service-logo local-logo" src="assets/worldle-logo.webp" alt="" width="180" height="64">
             <span class="card-name">WORLDLE</span>
             <span class="card-desc">Guess the country</span>
         </a>
