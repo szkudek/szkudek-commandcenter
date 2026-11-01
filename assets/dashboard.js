@@ -643,9 +643,19 @@
         const done = tasks.filter(task => task.done).length;
         get('tasks-progress').max = tasks.length || 1; get('tasks-progress').value = done;
         get('tasks-count').textContent = `${done} / ${tasks.length} ukończonych`;
+        const dailyTasks = state.tasks.filter(task => task.date === today());
+        get('tasks-shortcut-count').textContent = dailyTasks.length ? `${dailyTasks.filter(task => task.done).length} / ${dailyTasks.length} ukończonych · Otwórz ↗` : 'Zaplanuj dzień ↗';
         get('tasks-empty').hidden = tasks.length > 0;
         get('tasks-title').textContent = date === today() ? '✓ Zadania na dziś' : `✓ Zadania — ${date}`;
     }
+    get('tasks-shortcut').addEventListener('click', () => {
+        rolloverDay();
+        get('tasks-date').value = today();
+        renderTasks();
+        get('tasks-dialog').showModal();
+        get('task-title').focus();
+    });
+    get('tasks-close').addEventListener('click', () => get('tasks-dialog').close());
     get('tasks-date').addEventListener('change', renderTasks);
     get('tasks-today').addEventListener('click', () => { get('tasks-date').value = today(); renderTasks(); });
     get('task-form').addEventListener('submit', event => {

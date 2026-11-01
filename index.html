@@ -592,7 +592,7 @@ footer span {
     .shop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 </style>
-<link rel="stylesheet" href="assets/dashboard.css?v=20261101-1">
+<link rel="stylesheet" href="assets/dashboard.css?v=20261101-2">
 </head>
 
 <body>
@@ -628,6 +628,8 @@ footer span {
             <img src="assets/notes-icon.svg" alt="" width="26" height="26">
         </button>
     </div>
+        <div class="header-daily-tools">
+            <button type="button" id="tasks-shortcut" class="tasks-shortcut" aria-haspopup="dialog" aria-controls="tasks-dialog"><span>✓ Zadania na dziś</span><span id="tasks-shortcut-count">Otwórz ↗</span></button>
         <section class="radio-panel" aria-labelledby="radio-title">
             <h2 id="radio-title">♫ RADIO</h2>
             <div class="radio-pickers">
@@ -672,6 +674,7 @@ footer span {
                 <p class="radio-help">Streamów szukaj na stronach stacji lub w <a class="radio-source" href="https://www.radio-browser.info/" target="_blank" rel="noopener">Radio Browser</a> i <a class="radio-source" href="https://fmstream.org/" target="_blank" rel="noopener">FMSTREAM</a>. Wklej adres audio (np. MP3 lub AAC), a nie adres strony lub playlisty M3U/PLS.</p>
             </details>
         </section>
+        </div>
     </div>
 </header>
 
@@ -709,13 +712,7 @@ footer span {
     <button type="button" id="backup-now">Utwórz kopię</button>
     <button type="button" id="backup-later">Przypomnij po kolejnych zmianach</button>
 </aside>
-<section class="tasks-panel" aria-labelledby="tasks-title">
-    <div class="tasks-heading"><h2 id="tasks-title">✓ Zadania na dziś</h2><label for="tasks-date">Dzień <input id="tasks-date" type="date" required></label><button type="button" id="tasks-today">Dzisiaj</button></div>
-    <form id="task-form"><label class="sr-only" for="task-title">Nowe zadanie</label><input id="task-title" maxlength="160" placeholder="Np. 15 minut taktyki szachowej" required><button type="submit">＋ Dodaj zadanie</button></form>
-    <div class="task-progress"><progress id="tasks-progress" max="1" value="0" aria-label="Postęp zadań"></progress><span id="tasks-count" role="status"></span></div>
-    <ul id="task-list"></ul><p id="tasks-empty" class="utility-help">Dodaj pierwsze zadanie na ten dzień.</p>
-    <p id="tasks-status" class="utility-help" role="status"></p>
-</section>
+
 <main id="sections">
 
 <section class="category" id="socials-section">
@@ -902,6 +899,15 @@ footer span {
 
 </div>
 
+<dialog id="tasks-dialog" class="tile-dialog tasks-panel" aria-labelledby="tasks-title">
+    <div class="tasks-dialog-header"><span class="utility-help">TWÓJ PLAN DNIA</span><button type="button" id="tasks-close" aria-label="Zamknij zadania">Zamknij ×</button></div>
+    <div class="tasks-heading"><h2 id="tasks-title">✓ Zadania na dziś</h2><label for="tasks-date">Dzień <input id="tasks-date" type="date" required></label><button type="button" id="tasks-today">Dzisiaj</button></div>
+    <form id="task-form"><label class="sr-only" for="task-title">Nowe zadanie</label><input id="task-title" maxlength="160" placeholder="Np. 15 minut taktyki szachowej" required><button type="submit">＋ Dodaj zadanie</button></form>
+    <div class="task-progress"><progress id="tasks-progress" max="1" value="0" aria-label="Postęp zadań"></progress><span id="tasks-count" role="status"></span></div>
+    <ul id="task-list"></ul><p id="tasks-empty" class="utility-help">Dodaj pierwsze zadanie na ten dzień.</p>
+    <p id="tasks-status" class="utility-help" role="status"></p>
+</dialog>
+
 <dialog id="notes-dialog" class="tile-dialog notes-dialog" aria-labelledby="notes-dialog-title">
     <div class="notes-dialog-header">
         <h2 id="notes-dialog-title">Notatnik</h2>
@@ -982,9 +988,9 @@ footer span {
     <p id="backup-status" class="utility-help" role="status"></p>
     <button type="button" id="backup-submit">Zapisz kopię</button>
 </dialog>
-<script src="assets/backup.js?v=20261101-1" defer></script>
-<script src="assets/radio.js?v=20261101-1" defer></script>
-<script src="assets/dashboard.js?v=20261101-1" defer></script>
+<script src="assets/backup.js?v=20261101-2" defer></script>
+<script src="assets/radio.js?v=20261101-2" defer></script>
+<script src="assets/dashboard.js?v=20261101-2" defer></script>
 <script>
 // CLOCK
 
