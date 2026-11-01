@@ -813,6 +813,29 @@
         } catch (error) { get('backup-status').textContent = error.message; }
         finally { backupBusy = false; get('backup-submit').disabled = get('backup-close').disabled = false; }
     });
+    function updateSmsLink() {
+        const raw = get('sms-number').value.trim();
+        const number = raw.replace(/[ ()-]/g, '');
+        const body = get('sms-body').value;
+        const valid = /^\+[1-9]\d{7,14}$/.test(number) && body.trim().length > 0 && body.length <= 1600;
+        const link = get('sms-open-app');
+        link.setAttribute('aria-disabled', String(!valid));
+        if (valid) link.href = `sms:${number}?body=${encodeURIComponent(body)}`;
+        else link.removeAttribute('href');
+        get('sms-number').setCustomValidity(raw && !/^\+[1-9]\d{7,14}$/.test(number) ? 'Podaj jeden numer z kodem kraju, np. +48 123 456 789.' : '');
+        return valid;
+    }
+    function clearSms() { get('sms-form').reset(); get('sms-status').textContent = ''; updateSmsLink(); }
+    get('sms-shortcut').addEventListener('click', () => { clearSms(); get('sms-dialog').showModal(); get('sms-number').focus(); });
+    get('sms-close').addEventListener('click', () => get('sms-dialog').close());
+    get('sms-dialog').addEventListener('close', clearSms);
+    window.addEventListener('pagehide', clearSms);
+    ['sms-number', 'sms-body'].forEach(id => get(id).addEventListener('input', () => { get('sms-status').textContent = ''; updateSmsLink(); }));
+    get('sms-form').addEventListener('submit', event => event.preventDefault());
+    get('sms-open-app').addEventListener('click', event => {
+        if (!updateSmsLink()) { event.preventDefault(); get('sms-form').reportValidity(); get('sms-status').textContent = 'Wpisz numer z kodem kraju i treść wiadomości.'; return; }
+        get('sms-status').textContent = 'Otwieranie aplikacji SMS. Sprawdź odbiorcę i treść przed wysłaniem.';
+    });
     renderTiles(); renderTasks(); updateBackupReminder(); updateWebSearch();
 
 })();

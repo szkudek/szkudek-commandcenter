@@ -174,3 +174,17 @@ html { scrollbar-width: auto; scrollbar-color: var(--gold) var(--bg); }
 .section-add-site { padding: 8px 11px; border: 1px solid var(--border); border-radius: 7px; background: var(--panel); color: var(--gold-light); font: inherit; font-size: 11px; cursor: pointer; flex-shrink: 0; }
 .section-add-site:hover { border-color: var(--gold); }
 .section-add-site:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+/* SMS sits directly above Discord while keeping the shortcut row aligned. */
+.header-shortcuts { display: grid; grid-template-columns: repeat(4, 44px); grid-template-rows: 44px 44px; gap: 10px; }
+.sms-shortcut { grid-column: 1; grid-row: 1; display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; padding: 0; border: 1px solid var(--border); border-radius: 10px; background: var(--panel); color: var(--gold-light); cursor: pointer; }
+.header-shortcuts .discord-shortcut { grid-column: 1; grid-row: 2; }
+.header-shortcuts .chatgpt-shortcut { grid-column: 2; grid-row: 2; }
+.header-shortcuts .codex-shortcut { grid-column: 3; grid-row: 2; }
+.header-shortcuts .notes-shortcut { grid-column: 4; grid-row: 2; }
+.sms-shortcut:hover { border-color: var(--gold); background: var(--panel-hover); }
+.sms-shortcut:focus-visible, .sms-open-app:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+#sms-dialog { width: min(540px, calc(100% - 28px)); }
+#sms-body { width: 100%; resize: vertical; min-height: 120px; max-height: 35dvh; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font: inherit; font-size: 13px; line-height: 1.6; }
+.sms-open-app { display: inline-flex; padding: 11px 14px; border: 1px solid var(--gold); border-radius: 8px; background: var(--bg); color: var(--gold-light); text-decoration: none; font-size: 12px; }
+.sms-open-app[aria-disabled="true"] { opacity: .5; cursor: not-allowed; }

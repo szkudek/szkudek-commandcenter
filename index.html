@@ -592,7 +592,7 @@ footer span {
     .shop-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 </style>
-<link rel="stylesheet" href="assets/dashboard.css?v=20261101-5">
+<link rel="stylesheet" href="assets/dashboard.css?v=20261101-6">
 </head>
 
 <body>
@@ -616,6 +616,7 @@ footer span {
 
     <div class="header-utilities">
     <div class="header-shortcuts">
+        <button type="button" class="sms-shortcut" id="sms-shortcut" aria-label="Otwórz SMS" aria-haspopup="dialog" aria-controls="sms-dialog" title="Przygotuj SMS"><svg viewBox="0 0 24 24" width="25" height="25" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16v12H9l-5 4V4Z"/><path d="M8 8h8M8 12h5"/></svg></button>
         <a class="discord-shortcut" href="discord://-/channels/@me" aria-label="Otwórz aplikację Discord" title="Otwórz aplikację Discord">
             <img src="assets/discord-logo.svg" alt="" width="26" height="26">
         </a>
@@ -919,6 +920,22 @@ footer span {
 
 </div>
 
+<dialog id="sms-dialog" class="tile-dialog sms-dialog" aria-labelledby="sms-dialog-title">
+    <div class="notes-dialog-header"><h2 id="sms-dialog-title">Przygotuj SMS</h2><button type="button" id="sms-close" aria-label="Zamknij SMS">Zamknij ×</button></div>
+    <p class="utility-help">Wpisz odbiorcę i wiadomość. Wysłanie potwierdzisz w swojej aplikacji SMS.</p>
+    <form id="sms-form">
+        <label for="sms-number">Numer telefonu z kodem kraju</label>
+        <input id="sms-number" type="tel" inputmode="tel" autocomplete="off" placeholder="+48 123 456 789" maxlength="32" required aria-describedby="sms-number-help">
+        <p id="sms-number-help" class="utility-help">Jeden odbiorca, np. +48 dla Polski.</p>
+        <label for="sms-body">Treść wiadomości</label>
+        <textarea id="sms-body" rows="5" maxlength="1600" placeholder="Napisz wiadomość…" required autocomplete="off"></textarea>
+        <p class="utility-help">Numer i treść nie są zapisywane przez stronę ani dołączane do kopii danych. Otwarcie aplikacji przekaże je do niej. Opłata za wysłanie zależy od operatora.</p>
+        <p class="utility-help">Funkcja wymaga aplikacji obsługującej linki SMS. Na komputerze może wymagać połączenia z telefonem. Niektóre aplikacje mogą nie uzupełnić treści.</p>
+        <p id="sms-status" class="utility-help" role="status"></p>
+        <div class="dialog-actions"><a id="sms-open-app" class="sms-open-app" aria-disabled="true">Otwórz w aplikacji SMS ↗</a></div>
+    </form>
+</dialog>
+
 <dialog id="tasks-dialog" class="tile-dialog tasks-panel" aria-labelledby="tasks-title">
     <div class="tasks-dialog-header"><span class="utility-help">TWÓJ PLAN DNIA</span><button type="button" id="tasks-close" aria-label="Zamknij zadania">Zamknij ×</button></div>
     <div class="tasks-heading"><h2 id="tasks-title">✓ Zadania na dziś</h2><label for="tasks-date">Dzień <input id="tasks-date" type="date" required></label><button type="button" id="tasks-today">Dzisiaj</button></div>
@@ -1011,7 +1028,7 @@ footer span {
 </dialog>
 <script src="assets/backup.js?v=20261101-2" defer></script>
 <script src="assets/radio.js?v=20261101-2" defer></script>
-<script src="assets/dashboard.js?v=20261101-5" defer></script>
+<script src="assets/dashboard.js?v=20261101-6" defer></script>
 <script>
 // CLOCK
 
