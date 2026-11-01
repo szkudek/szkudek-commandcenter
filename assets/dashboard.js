@@ -2,9 +2,9 @@
     'use strict';
     const get = id => document.getElementById(id);
     const storageKey = 'szkudek-dashboard-v1';
-    const baseSectionIds = ['socials-section', 'chess-section', 'learn-section', 'gaming-section', 'shops-section'];
+    const baseSectionIds = ['socials-section', 'chess-section', 'learn-section', 'gaming-section', 'shops-section', 'useful-section'];
     const originalNames = new Map(baseSectionIds.map(id => [id, get(id).querySelector('h2').textContent]));
-    const sectionIds = ['socials-section', 'chess-section', 'learn-section', 'gaming-section', 'shops-section'];
+    const sectionIds = ['socials-section', 'chess-section', 'learn-section', 'gaming-section', 'shops-section', 'useful-section'];
     const favoriteId = 'favorites-section';
     const allSectionIds = [favoriteId, ...sectionIds];
     const grids = new Map();
@@ -237,7 +237,7 @@
         sections.querySelectorAll('[data-custom-tile]').forEach(wrapper => wrapper.remove());
         [...tiles].filter(([, info]) => info.custom).forEach(([id]) => tiles.delete(id));
         state.customTiles.forEach(tile => {
-            const card = node('a', `card custom-card${tile.section === 'shops-section' ? ' shop-card' : ''}`);
+            const card = node('a', `card custom-card${['shops-section', 'useful-section'].includes(tile.section) ? ' shop-card' : ''}`);
             card.href = tile.url;
             card.target = '_blank';
             card.rel = 'noopener';
@@ -385,11 +385,12 @@
         dragged = null;
     });
 
-    function openTileDialog(id = null) {
+    function openTileDialog(id = null, defaultSection = null) {
         editingTile = id;
         const tile = state.customTiles.find(value => value.id === id);
         get('tile-form').reset();
         fillSectionOptions(get('tile-section'));
+        if (!tile && defaultSection) get('tile-section').value = defaultSection;
         get('tile-dialog-title').textContent = tile ? 'Edytuj kafelek' : 'Dodaj kafelek';
         get('tile-form-status').textContent = '';
         if (tile) {
@@ -399,6 +400,10 @@
         get('tile-dialog').showModal();
     }
     get('add-tile').addEventListener('click', () => openTileDialog());
+    get('add-useful-site').addEventListener('click', () => {
+        openTileDialog(null, 'useful-section');
+        get('tile-name').focus();
+    });
     get('tile-cancel').addEventListener('click', () => get('tile-dialog').close());
     get('tile-form').addEventListener('submit', event => {
         event.preventDefault();

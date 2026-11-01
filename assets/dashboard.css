@@ -161,3 +161,16 @@ html { scrollbar-width: auto; scrollbar-color: var(--gold) var(--bg); }
 .scroll-to-socials:hover { border-color: var(--gold); background: #303327; }
 .scroll-to-socials:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
 .header-status { display: flex; flex-direction: column; align-items: center; }
+
+/* Useful links use smaller icons and the same compact rhythm as shops. */
+.useful-grid { grid-template-columns: repeat(auto-fill, minmax(115px, 135px)); gap: 10px; }
+.useful-grid > .tile-wrap { height: 74px; }
+.useful-grid .card { padding: 10px 8px; gap: 5px; }
+.useful-grid .card-icon { display: inline-flex; align-items: center; justify-content: center; font-size: 23px; line-height: 1; color: var(--gold-light); }
+.useful-grid .card-icon svg, .useful-grid .card-icon img { width: 23px; height: 23px; }
+.useful-grid .card-name { font-size: 11px; }
+.compact .useful-grid > .tile-wrap { height: 68px; }
+
+.section-add-site { padding: 8px 11px; border: 1px solid var(--border); border-radius: 7px; background: var(--panel); color: var(--gold-light); font: inherit; font-size: 11px; cursor: pointer; flex-shrink: 0; }
+.section-add-site:hover { border-color: var(--gold); }
+.section-add-site:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
