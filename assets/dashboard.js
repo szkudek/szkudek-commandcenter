@@ -306,6 +306,17 @@
     get('geo-close').addEventListener('click', closeGeo);
     geoPanel.addEventListener('keydown', event => { if (event.key === 'Escape') { event.preventDefault(); closeGeo(); } });
     search.addEventListener('input', applyFilter);
+    get('scroll-to-socials').addEventListener('click', () => {
+        search.value = '';
+        state.layout.collapsed = state.layout.collapsed.filter(id => id !== 'socials-section');
+        applyFilter();
+        updateWebSearch();
+        persist('');
+        const target = get('socials-section');
+        target.setAttribute('tabindex', '-1');
+        target.focus({ preventScroll: true });
+        target.scrollIntoView({ block: 'start', behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
+    });
 
     get('edit-layout').addEventListener('click', () => {
         editMode = !editMode;

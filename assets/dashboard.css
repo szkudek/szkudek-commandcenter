@@ -156,3 +156,8 @@ html { scrollbar-width: auto; scrollbar-color: var(--gold) var(--bg); }
     html::-webkit-scrollbar-thumb:hover { background: var(--gold-light); }
     html::-webkit-scrollbar-corner { background: var(--bg); }
 }
+
+.scroll-to-socials { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; margin-top: 14px; border: 1px solid var(--border); border-radius: 50%; background: rgba(32,35,28,.9); color: var(--gold-light); cursor: pointer; transition: border-color .2s, background .2s; }
+.scroll-to-socials:hover { border-color: var(--gold); background: #303327; }
+.scroll-to-socials:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+.header-status { display: flex; flex-direction: column; align-items: center; }
