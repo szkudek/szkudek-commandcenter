@@ -145,3 +145,14 @@ body.compact { padding-top: 18px; }
 #tasks-dialog .tasks-heading { margin-bottom: 18px; }
 #tasks-dialog #task-list { max-height: 40dvh; overflow-y: auto; }
 @media(max-width: 700px) { #tasks-dialog { padding: 18px; } }
+
+/* Wider page scrollbar, matched to the dashboard palette. */
+html { scrollbar-width: auto; scrollbar-color: var(--gold) var(--bg); }
+@supports selector(::-webkit-scrollbar) {
+    html { scrollbar-color: auto; }
+    html::-webkit-scrollbar { width: 16px; height: 16px; }
+    html::-webkit-scrollbar-track { background: var(--bg); }
+    html::-webkit-scrollbar-thumb { background: var(--gold); border: 3px solid var(--bg); border-radius: 10px; min-height: 48px; }
+    html::-webkit-scrollbar-thumb:hover { background: var(--gold-light); }
+    html::-webkit-scrollbar-corner { background: var(--bg); }
+}
