@@ -55,7 +55,10 @@
     function save(next) {
         try {
             next = validate(next);
-            localStorage.setItem(storageKey, JSON.stringify(next));
+            const serialized = JSON.stringify(next);
+            const changed = localStorage.getItem(storageKey) !== serialized;
+            localStorage.setItem(storageKey, serialized);
+            if (changed) window.dispatchEvent(new Event('commandcenter:radio-changed'));
             state = next;
             return true;
         } catch (error) {

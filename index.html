@@ -684,6 +684,8 @@ footer span {
 
 <div class="dashboard-toolbar" aria-label="Personalizacja strony">
     <button type="button" id="add-tile">＋ Dodaj kafelek</button>
+    <button type="button" id="manage-sections">☷ Sekcje</button>
+    <button type="button" id="compact-toggle" aria-pressed="false">▦ Tryb kompaktowy</button>
     <button type="button" id="edit-layout" aria-pressed="false">↔ Edytuj układ</button>
     <details class="backup-menu">
         <summary>Kopia ustawień</summary>
@@ -691,12 +693,29 @@ footer span {
             <button type="button" id="dashboard-export">Eksportuj wszystko</button>
             <button type="button" id="dashboard-import">Importuj kopię</button>
             <input type="file" id="dashboard-import-file" accept="application/json,.json" hidden>
-            <p>Radio, notatki, ulubione, własne kafelki i układ w jednym pliku.</p>
+            <p>Zadania, sekcje, radio i ustawienia. Kopia może być szyfrowana hasłem i pomijać notatki.</p>
         </div>
     </details>
 </div>
 <p class="dashboard-status" id="dashboard-status" role="status" aria-live="polite"></p>
 <p class="layout-help" id="layout-help" hidden>Przeciągnij kafelek za uchwyt ⠿ w obrębie sekcji lub użyj przycisków ← i →. Własne kafelki możesz edytować i usuwać. Zmiany zapisują się automatycznie.</p>
+<p class="search-help">Naciśnij <kbd>/</kbd>, aby wyszukać. <kbd>Enter</kbd> otworzy jedyny pasujący kafelek; <kbd>Esc</kbd> wyczyści pole.</p>
+<div class="web-search" aria-label="Wyszukiwanie w internecie">
+    <a id="search-google" target="_blank" rel="noopener noreferrer" hidden>Szukaj w Google ↗</a>
+    <a id="search-youtube" target="_blank" rel="noopener noreferrer" hidden>Szukaj w YouTube ↗</a>
+</div>
+<aside id="backup-reminder" class="backup-reminder" hidden>
+    <span>Masz wiele zmian od ostatniej pełnej kopii. Zapisz kopię swoich danych.</span>
+    <button type="button" id="backup-now">Utwórz kopię</button>
+    <button type="button" id="backup-later">Przypomnij po kolejnych zmianach</button>
+</aside>
+<section class="tasks-panel" aria-labelledby="tasks-title">
+    <div class="tasks-heading"><h2 id="tasks-title">✓ Zadania na dziś</h2><label for="tasks-date">Dzień <input id="tasks-date" type="date" required></label><button type="button" id="tasks-today">Dzisiaj</button></div>
+    <form id="task-form"><label class="sr-only" for="task-title">Nowe zadanie</label><input id="task-title" maxlength="160" placeholder="Np. 15 minut taktyki szachowej" required><button type="submit">＋ Dodaj zadanie</button></form>
+    <div class="task-progress"><progress id="tasks-progress" max="1" value="0" aria-label="Postęp zadań"></progress><span id="tasks-count" role="status"></span></div>
+    <ul id="task-list"></ul><p id="tasks-empty" class="utility-help">Dodaj pierwsze zadanie na ten dzień.</p>
+    <p id="tasks-status" class="utility-help" role="status"></p>
+</section>
 <main id="sections">
 
 <section class="category" id="socials-section">
@@ -891,7 +910,10 @@ footer span {
     <div class="notebook-actions">
         <button type="button" id="notes-new">＋ Nowa notatka</button>
         <button type="button" id="notes-delete" disabled>Usuń notatkę</button>
+        <button type="button" id="notes-pin" aria-pressed="false" disabled>☆ Przypnij</button>
+        <button type="button" id="notes-export" disabled>Eksportuj notatkę .txt</button>
     </div>
+    <label for="notes-search">Szukaj w notatkach</label><input id="notes-search" type="search" maxlength="200" placeholder="Tytuł, kategoria lub treść…">
     <div class="notebook-selectors">
         <div>
             <label for="notes-filter">Kategoria</label>
@@ -939,6 +961,28 @@ footer span {
         </div>
     </form>
 </dialog>
+<dialog id="sections-dialog" class="tile-dialog" aria-labelledby="sections-title">
+    <div class="notes-dialog-header"><h2 id="sections-title">Twoje sekcje</h2><button type="button" id="sections-close">Zamknij</button></div>
+    <p class="utility-help">Zmień nazwy sekcji lub dodaj własną. Kafelki przeniesiesz przyciskiem ↗ w trybie edycji układu.</p>
+    <form id="section-form"><label for="section-name">Nazwa nowej sekcji</label><input id="section-name" maxlength="60" required><button type="submit">＋ Dodaj sekcję</button></form>
+    <div id="sections-list"></div><p id="sections-status" class="utility-help" role="status"></p>
+</dialog>
+<dialog id="move-dialog" class="tile-dialog" aria-labelledby="move-title">
+    <form id="move-form"><h2 id="move-title">Przenieś kafelek</h2><p id="move-name" class="utility-help"></p><label for="move-section">Sekcja docelowa</label><select id="move-section"></select><div class="dialog-actions"><button type="button" id="move-cancel">Anuluj</button><button type="submit">Przenieś</button></div></form>
+</dialog>
+<dialog id="backup-dialog" class="tile-dialog" aria-labelledby="backup-title">
+    <div class="notes-dialog-header"><h2 id="backup-title">Kopia danych</h2><button type="button" id="backup-close">Zamknij</button></div>
+    <div id="backup-export-options">
+        <label class="check-label"><input id="backup-encrypt" type="checkbox" checked> Szyfruj plik hasłem</label>
+        <label class="check-label"><input id="backup-notes" type="checkbox" checked> Dołącz notatki</label>
+        <p class="utility-help">Zwykły plik JSON można odczytać bez hasła. Szyfrowanie chroni plik kopii; dane w przeglądarce pozostają zapisane lokalnie bez szyfrowania.</p>
+    </div>
+    <div id="backup-password-fields"><label for="backup-password">Hasło kopii</label><input id="backup-password" type="password" autocomplete="new-password" maxlength="1024"><div id="backup-confirm-field"><label for="backup-password-confirm">Powtórz hasło</label><input id="backup-password-confirm" type="password" autocomplete="new-password" maxlength="1024"><p class="utility-help">Minimum 12 znaków. Zachowaj hasło — bez niego nie odzyskasz kopii.</p></div></div>
+    <p id="backup-preview" class="utility-help"></p><ul id="backup-domains" class="utility-help"></ul>
+    <p id="backup-status" class="utility-help" role="status"></p>
+    <button type="button" id="backup-submit">Zapisz kopię</button>
+</dialog>
+<script src="assets/backup.js" defer></script>
 <script src="assets/radio.js" defer></script>
 <script src="assets/dashboard.js" defer></script>
 <script>

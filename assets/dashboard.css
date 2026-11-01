@@ -62,3 +62,71 @@
     .tile-dialog { padding: 18px; }
 }
 @media(prefers-reduced-motion: reduce) { .tile-wrap > .card { transition: none; } }
+
+/* Daily tools and personalization follow the existing olive/gold palette. */
+.search-help { text-align: center; color: var(--muted); font-size: 11px; line-height: 1.7; margin: 0 0 8px; }
+kbd { border: 1px solid var(--border); border-radius: 4px; padding: 1px 5px; font: inherit; color: var(--gold-light); }
+.web-search { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; min-height: 18px; margin-bottom: 18px; }
+.web-search a { color: var(--gold-light); font-size: 12px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.tasks-panel { margin: 0 0 32px; padding: 20px; background: var(--panel); border: 1px solid var(--border); border-radius: 12px; }
+.tasks-heading { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+.tasks-heading h2 { flex: 1 1 200px; color: var(--gold-light); font: 600 17px 'Cinzel', serif; }
+.tasks-heading label { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); }
+.tasks-panel input:not([type="checkbox"]), .tasks-panel button, .backup-reminder button { background: var(--bg); color: var(--text); border: 1px solid var(--border); border-radius: 7px; padding: 9px 12px; font: inherit; font-size: 12px; min-width: 0; }
+.tasks-panel button, .backup-reminder button { cursor: pointer; }
+.tasks-panel button:hover, .backup-reminder button:hover { border-color: var(--gold); }
+.tasks-panel input[type="date"] { color-scheme: dark; max-width: 160px; }
+#task-form { display: flex; gap: 8px; }
+#task-title { flex: 1; }
+.task-progress { display: flex; align-items: center; gap: 12px; margin: 14px 0 8px; color: var(--muted); font-size: 11px; }
+.task-progress progress { flex: 1; height: 8px; accent-color: var(--gold); }
+#task-list { list-style: none; }
+.task-row { display: flex; align-items: center; gap: 10px; border-top: 1px solid var(--border); padding: 9px 0; }
+.task-row label { display: flex; align-items: center; flex: 1; gap: 10px; font-size: 13px; line-height: 1.6; min-width: 0; cursor: pointer; }
+.task-row span { overflow-wrap: anywhere; }
+.task-row input { accent-color: var(--gold); flex-shrink: 0; width: 18px; height: 18px; }
+.task-done span { text-decoration: line-through; color: var(--muted); }
+.backup-reminder { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 14px; margin-bottom: 18px; border: 1px solid var(--gold); border-radius: 10px; color: var(--gold-light); font-size: 12px; line-height: 1.7; }
+.backup-reminder span { flex: 1 1 240px; }
+.section-row { border-top: 1px solid var(--border); padding: 12px 0; display: flex; flex-wrap: wrap; align-items: end; gap: 8px; }
+.section-row label { flex: 1 1 100%; margin-top: 0; }
+.section-row input { margin-top: 6px; }
+#sections-list { margin-top: 22px; }
+#section-form button { margin-top: 10px; }
+#backup-dialog .check-label { display: flex; align-items: center; gap: 10px; color: var(--text); }
+#backup-dialog input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--gold); }
+#backup-domains { margin: 12px 0 12px 20px; max-height: 160px; overflow-y: auto; overflow-wrap: anywhere; }
+#backup-submit { margin-top: 14px; }
+#backup-status { color: var(--gold-light); }
+#notes-dialog { width: min(680px, calc(100% - 28px)); }
+body.compact { padding-top: 18px; }
+.compact header { padding-top: 25px; padding-bottom: 20px; margin-bottom: 24px; }
+.compact h1 { font-size: clamp(21px, 4vw, 34px); }
+.compact .datetime { margin-top: 12px; }
+.compact .tile-wrap { height: 120px; }
+.compact .shop-grid > .tile-wrap { height: 90px; }
+.compact .tile-wrap > .card { padding: 16px 10px; gap: 5px; }
+.compact .card-name { font-size: 12px; }
+.compact .card-desc { font-size: 10px; }
+.compact .category { margin-bottom: 22px; }
+.compact .grid { gap: 10px; }
+.compact .category-header { margin-bottom: 10px; padding-bottom: 9px; }
+.compact .search-box { margin-bottom: 30px; }
+.compact .tasks-panel { padding: 14px; }
+.tasks-panel :focus-visible, .web-search :focus-visible, .backup-reminder :focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+[hidden] { display: none !important; }
+@media(max-width: 700px) {
+    #task-form { flex-wrap: wrap; }
+    #task-title { flex-basis: 100%; }
+    .tasks-panel { padding: 14px; }
+    .tasks-heading { gap: 8px; }
+    .task-progress { flex-wrap: wrap; }
+    .task-progress progress { min-width: 120px; }
+    .compact .grid:not(.shop-grid) { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .compact .tile-wrap { height: 130px; }
+    .compact .tile-wrap .badge-logo, .compact .tile-wrap .oldgames-logo { max-width: 100%; }
+    .dashboard-toolbar { gap: 7px; }
+    .dashboard-toolbar button, .dashboard-toolbar summary { padding: 9px 10px; }
+}
+@media(max-width: 380px) { .compact .grid:not(.shop-grid) { grid-template-columns: 1fr; } }
