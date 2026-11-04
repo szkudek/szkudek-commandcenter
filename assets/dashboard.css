@@ -188,3 +188,9 @@ html { scrollbar-width: auto; scrollbar-color: var(--gold) var(--bg); }
 #sms-body { width: 100%; resize: vertical; min-height: 120px; max-height: 35dvh; padding: 10px; border: 1px solid var(--border); border-radius: 8px; background: var(--bg); color: var(--text); font: inherit; font-size: 13px; line-height: 1.6; }
 .sms-open-app { display: inline-flex; padding: 11px 14px; border: 1px solid var(--gold); border-radius: 8px; background: var(--bg); color: var(--gold-light); text-decoration: none; font-size: 12px; }
 .sms-open-app[aria-disabled="true"] { opacity: .5; cursor: not-allowed; }
+
+.akademia64-card { --card-art: url('assets/akademia64.webp'); }
+.akademia64-mark { display: inline-flex; align-items: center; gap: 9px; color: var(--gold-light); font-size: 52px; line-height: 1; }
+.akademia64-mark > span { font: 600 25px 'Cinzel', serif; border-left: 1px solid var(--border); padding-left: 10px; }
+.compact .akademia64-mark { font-size: 34px; }
+.compact .akademia64-mark > span { font-size: 20px; }
